@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="100%" height="100%">
+  <!-- White Background -->
+  <rect width="100%" height="100%" fill="#ffffff" />
+  
+  <g transform="translate(50, 50)">
+    <!-- Text on the Left -->
+    <text x="110" y="390" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="115" font-weight="900" fill="#002147" letter-spacing="-3">SKILL</text>
+    <text x="175" y="495" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="115" font-weight="900" fill="#002147" letter-spacing="-3">.SCH</text>
+    
+    <!-- Helical Ribbon on the Right -->
+    <g transform="translate(480, 220)">
+      <!-- Loop 1: Green at the top -->
+      <path d="M10,40 C110,40 140,110 100,160 C75,190 20,200 0,200" fill="none" stroke="#007944" stroke-width="32" stroke-linecap="round" />
+      <!-- Loop 2: Yellow / Orange -->
+      <path d="M0,130 C120,130 140,210 100,260 C70,290 10,300 -10,300" fill="none" stroke="#f2a900" stroke-width="32" stroke-linecap="round" />
+      <!-- Loop 3: Red -->
+      <path d="M-10,230 C110,230 140,310 100,360 C70,390 10,400 -15,400" fill="none" stroke="#da291c" stroke-width="32" stroke-linecap="round" />
+      <!-- Loop 4: Blue at the bottom -->
+      <path d="M-15,330 C110,330 140,410 100,460 C65,490 -10,500 -30,500" fill="none" stroke="#0085ca" stroke-width="32" stroke-linecap="round" />
+      
+      <!-- Connective spiral accent (backside ribbon) -->
+      <path d="M100,160 C80,120 40,100 10,100" fill="none" stroke="#f2a900" stroke-width="22" stroke-opacity="0.85" />
+      <path d="M100,260 C80,220 40,200 -10,200" fill="none" stroke="#da291c" stroke-width="22" stroke-opacity="0.85" />
+      <path d="M100,360 C80,320 40,300 -15,300" fill="none" stroke="#f2a900" stroke-width="22" stroke-opacity="0.85" />
+    </g>
+  </g>
+</svg>

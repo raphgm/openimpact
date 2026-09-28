@@ -1,0 +1,97 @@
+{
+  "entities": {
+    "grant": {
+      "title": "Grant Program",
+      "description": "An active open-source, civic tech, or public goods funding grant program.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "availableFunding": { "type": "number" },
+        "currency": { "type": "string" },
+        "category": { "type": "string" },
+        "deadline": { "type": "string" },
+        "description": { "type": "string" },
+        "status": { "type": "string" },
+        "grantSourceLabel": { "type": "string" },
+        "websiteUrl": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "title", "availableFunding", "currency", "category", "deadline", "description", "status"]
+    },
+    "grant_application": {
+      "title": "Grant Application",
+      "description": "A real grant application submitted to an active program.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "grantId": { "type": "string" },
+        "projectTitle": { "type": "string" },
+        "requestedAmount": { "type": "number" },
+        "currency": { "type": "string" },
+        "applicantName": { "type": "string" },
+        "applicantEmail": { "type": "string" },
+        "githubRepo": { "type": "string" },
+        "description": { "type": "string" },
+        "status": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "grantId", "projectTitle", "requestedAmount", "currency", "applicantName", "applicantEmail", "description", "status"]
+    },
+    "verification_request": {
+      "title": "Verification Request",
+      "description": "A verification audit request pending peer review or completed review.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "source": { "type": "string" },
+        "sourceId": { "type": "string" },
+        "projectTitle": { "type": "string" },
+        "submittedBy": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "description": { "type": "string" },
+        "status": { "type": "string" },
+        "documentUrl": { "type": "string" },
+        "auditStepsCompleted": { "type": "array" },
+        "auditorComments": { "type": "string" },
+        "auditedBy": { "type": "string" },
+        "auditedAt": { "type": "string" },
+        "reputationAllocated": { "type": "number" },
+        "metadata": { "type": "object" }
+      },
+      "required": ["id", "source", "sourceId", "projectTitle", "submittedBy", "createdAt", "description", "status"]
+    },
+    "scholarship_claim": {
+      "title": "Scholarship Claim",
+      "description": "A student registration for the SKILL.SCH scholarship program.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "github": { "type": "string" },
+        "stream": { "type": "string" },
+        "timestamp": { "type": "string" }
+      },
+      "required": ["id", "name", "email", "github", "stream", "timestamp"]
+    }
+  },
+  "firestore": {
+    "/grants/{grantId}": {
+      "schema": "grant",
+      "description": "Active funding grant programs list"
+    },
+    "/grant_applications/{applicationId}": {
+      "schema": "grant_application",
+      "description": "Submitted grant program applications"
+    },
+    "/verification_requests/{requestId}": {
+      "schema": "verification_request",
+      "description": "Verifications and peer audits"
+    },
+    "/scholarship_claims/{claimId}": {
+      "schema": "scholarship_claim",
+      "description": "Registered scholarship candidates and claims"
+    }
+  }
+}
