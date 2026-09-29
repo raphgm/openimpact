@@ -51,8 +51,8 @@ export const ImpactBadgeModal: React.FC<ImpactBadgeModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-xs flex items-center justify-center p-4">
-      <div className="bg-white border border-slate-200 rounded-3xl max-w-lg w-full p-6 shadow-2xl text-slate-900 relative space-y-5 text-left overflow-hidden">
+    <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+      <div className="bg-white border border-slate-200 rounded-3xl max-w-lg w-full p-6 shadow-2xl text-slate-900 relative space-y-5 text-left max-h-[calc(100dvh-2rem)] overflow-y-auto my-auto">
         
         {/* Background Decorative Banner */}
         <div className={`h-24 -mx-6 -mt-6 bg-gradient-to-r ${style.gradient} p-4 text-white relative flex items-center justify-between`}>

@@ -645,8 +645,8 @@ export const GrantsPortal: React.FC<GrantsPortalProps> = ({
 
       {/* Register Funding Program Modal */}
       {showRegisterModal && (
-        <div className="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-white border border-slate-100 rounded-3xl max-w-xl w-full p-8 shadow-2xl relative my-auto text-left space-y-6">
+        <div className="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+          <div className="bg-white border border-slate-100 rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl relative my-auto text-left space-y-6 max-h-[calc(100dvh-2rem)] overflow-y-auto">
             <button
               onClick={() => setShowRegisterModal(false)}
               className="absolute top-6 right-6 p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-lg transition"

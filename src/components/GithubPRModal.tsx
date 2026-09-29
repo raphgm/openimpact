@@ -23,18 +23,21 @@ import {
   Terminal,
   Building2,
 } from 'lucide-react';
+import { UserProfile, ExportedGithubData } from '../types';
 
 interface GithubPRModalProps {
   isOpen: boolean;
   onClose: () => void;
   prUrl?: string;
-  onOpenProofVerification?: () => void;
+  currentUser?: UserProfile | null;
+  onOpenProofVerification?: (data?: ExportedGithubData) => void;
 }
 
 export const GithubPRModal: React.FC<GithubPRModalProps> = ({
   isOpen,
   onClose,
   prUrl = 'github.com/openimpact/pay-bridge/pull/142',
+  currentUser,
   onOpenProofVerification,
 }) => {
   const [activeTab, setActiveTab] = useState<'conversation' | 'commits' | 'checks' | 'files'>('conversation');
@@ -96,8 +99,8 @@ export const GithubPRModal: React.FC<GithubPRModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/80 backdrop-blur-md overflow-y-auto">
-      <div className="bg-slate-900 border border-slate-700/80 rounded-2xl w-full max-w-4xl shadow-2xl text-slate-100 overflow-hidden my-auto text-left relative font-sans">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md overflow-y-auto">
+      <div className="bg-slate-900 border border-slate-700/80 rounded-2xl w-full max-w-4xl shadow-2xl text-slate-100 my-auto text-left relative font-sans max-h-[calc(100dvh-2rem)] overflow-y-auto">
         
         {/* Top GitHub Dark Header Bar */}
         <div className="bg-slate-950 border-b border-slate-800 px-4 py-3 flex items-center justify-between">
@@ -122,8 +125,28 @@ export const GithubPRModal: React.FC<GithubPRModalProps> = ({
               <button
                 type="button"
                 onClick={() => {
+                  const cleanUrl = prUrl.replace(/^https?:\/\//i, '').replace(/^www\./i, '');
+                  const match = cleanUrl.match(/github\.com\/([^/]+)\/([^/]+)\/pull\/(\d+)/i) ||
+                                cleanUrl.match(/^([^/]+)\/([^/]+)\/pull\/(\d+)/i);
+                  const repo = match ? `${match[1]}/${match[2]}` : 'openimpact/pay-bridge';
+                  const prNum = match ? `PR #${match[3]}` : 'PR #142';
+
+                  const exported: ExportedGithubData = {
+                    repo,
+                    contributorName: currentUser?.name || 'Sarah Chen',
+                    contributorHandle: currentUser?.githubUsername
+                      ? `@${currentUser.githubUsername}`
+                      : `@${currentUser?.handle || 'sarahchen-dev'}`,
+                    prTitle: 'feat(escrow): implement multi-currency fiat & crypto payout bridge router',
+                    prNumber: prNum,
+                    prUrl: `https://${cleanUrl}`,
+                    additions: 124,
+                    deletions: 12,
+                    date: 'May 12, 2026',
+                    status: 'Merged & Verified',
+                  };
                   onClose();
-                  onOpenProofVerification();
+                  onOpenProofVerification(exported);
                 }}
                 className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-mono font-bold rounded-md flex items-center space-x-1.5 transition cursor-pointer shadow-xs"
                 title="Generate Proof of Contribution Certificate from this PR"

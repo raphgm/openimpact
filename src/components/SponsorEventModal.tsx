@@ -248,7 +248,7 @@ export const SponsorEventModal: React.FC<SponsorEventModalProps> = ({
       onClick={onClose}
     >
       <div 
-        className="bg-white border border-slate-200/90 rounded-3xl max-w-3xl w-full p-6 sm:p-8 shadow-2xl text-slate-900 relative my-8 mx-auto text-left font-sans"
+        className="bg-white border border-slate-200/90 rounded-3xl max-w-3xl w-full p-6 sm:p-8 shadow-2xl text-slate-900 relative max-h-[calc(100dvh-2rem)] overflow-y-auto my-auto mx-auto text-left font-sans"
         onClick={(e) => e.stopPropagation()}
       >
         

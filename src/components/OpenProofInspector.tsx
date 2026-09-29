@@ -287,8 +287,8 @@ export const OpenProofInspector: React.FC<OpenProofInspectorProps> = ({ projects
 
       {/* Inspect Modal */}
       {inspectModalEvidence && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white border border-slate-200 rounded-3xl max-w-xl w-full p-8 shadow-2xl text-slate-900 relative space-y-6 text-left">
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+          <div className="bg-white border border-slate-200 rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl text-slate-900 relative space-y-6 text-left max-h-[calc(100dvh-2rem)] overflow-y-auto my-auto">
             {/* Modal Header */}
             <div className="flex items-center justify-between border-b border-slate-100 pb-4">
               <div className="flex items-center space-x-3">

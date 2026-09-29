@@ -89,6 +89,12 @@
         "bio": { "type": "string" },
         "location": { "type": "string" },
         "skills": { "type": "array" },
+        "githubUsername": { "type": "string" },
+        "githubVerified": { "type": "boolean" },
+        "githubBoundAt": { "type": "string" },
+        "githubPublicRepos": { "type": "number" },
+        "openProofPassportId": { "type": "string" },
+        "openProofActive": { "type": "boolean" },
         "createdAt": { "type": "string" }
       },
       "required": ["id", "name", "email", "role"]

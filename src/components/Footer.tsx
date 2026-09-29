@@ -303,8 +303,8 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenAuthModal }) =
 
       {/* 1. ABOUT MODAL */}
       {activeModal === 'about' && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm overflow-y-auto">
-          <div className="bg-[#FAF7F2] border border-[#EAE5DC] text-slate-900 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl space-y-6 relative my-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/60 backdrop-blur-sm overflow-y-auto">
+          <div className="bg-[#FAF7F2] border border-[#EAE5DC] text-slate-900 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl space-y-6 relative my-auto max-h-[calc(100dvh-2rem)] overflow-y-auto">
             <button
               onClick={() => setActiveModal(null)}
               className="absolute top-5 right-5 text-slate-500 hover:text-slate-900 p-2 rounded-full hover:bg-[#EAE5DC]/60 transition cursor-pointer"
@@ -359,8 +359,8 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenAuthModal }) =
 
       {/* 2. CONTACT MODAL */}
       {activeModal === 'contact' && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm overflow-y-auto">
-          <div className="bg-[#FAF7F2] border border-[#EAE5DC] text-slate-900 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl space-y-6 relative my-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/60 backdrop-blur-sm overflow-y-auto">
+          <div className="bg-[#FAF7F2] border border-[#EAE5DC] text-slate-900 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl space-y-6 relative my-auto max-h-[calc(100dvh-2rem)] overflow-y-auto">
             <button
               onClick={() => setActiveModal(null)}
               className="absolute top-5 right-5 text-slate-500 hover:text-slate-900 p-2 rounded-full hover:bg-[#EAE5DC]/60 transition cursor-pointer"
@@ -436,8 +436,8 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenAuthModal }) =
 
       {/* 3. FOR ORGANIZATIONS MODAL */}
       {activeModal === 'for-orgs' && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm overflow-y-auto">
-          <div className="bg-[#FAF7F2] border border-[#EAE5DC] text-slate-900 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl space-y-6 relative my-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/60 backdrop-blur-sm overflow-y-auto">
+          <div className="bg-[#FAF7F2] border border-[#EAE5DC] text-slate-900 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl space-y-6 relative my-auto max-h-[calc(100dvh-2rem)] overflow-y-auto">
             <button
               onClick={() => setActiveModal(null)}
               className="absolute top-5 right-5 text-slate-500 hover:text-slate-900 p-2 rounded-full hover:bg-[#EAE5DC]/60 transition cursor-pointer"
@@ -503,8 +503,8 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenAuthModal }) =
 
       {/* 4. FOR COLLECTIVES MODAL */}
       {activeModal === 'for-collectives' && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm overflow-y-auto">
-          <div className="bg-[#FAF7F2] border border-[#EAE5DC] text-slate-900 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl space-y-6 relative my-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/60 backdrop-blur-sm overflow-y-auto">
+          <div className="bg-[#FAF7F2] border border-[#EAE5DC] text-slate-900 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl space-y-6 relative my-auto max-h-[calc(100dvh-2rem)] overflow-y-auto">
             <button
               onClick={() => setActiveModal(null)}
               className="absolute top-5 right-5 text-slate-500 hover:text-slate-900 p-2 rounded-full hover:bg-[#EAE5DC]/60 transition cursor-pointer"
@@ -573,8 +573,8 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenAuthModal }) =
 
       {/* 4.5. FOR INDIVIDUALS MODAL */}
       {activeModal === 'for-individuals' && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm overflow-y-auto">
-          <div className="bg-[#FAF7F2] border border-[#EAE5DC] text-slate-900 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl space-y-6 relative my-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/60 backdrop-blur-sm overflow-y-auto">
+          <div className="bg-[#FAF7F2] border border-[#EAE5DC] text-slate-900 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl space-y-6 relative my-auto max-h-[calc(100dvh-2rem)] overflow-y-auto">
             <button
               onClick={() => setActiveModal(null)}
               className="absolute top-5 right-5 text-slate-500 hover:text-slate-900 p-2 rounded-full hover:bg-[#EAE5DC]/60 transition cursor-pointer"
@@ -643,8 +643,8 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenAuthModal }) =
 
       {/* 5. HELP & SUPPORT MODAL */}
       {activeModal === 'help' && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm overflow-y-auto">
-          <div className="bg-[#FAF7F2] border border-[#EAE5DC] text-slate-900 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl space-y-6 relative my-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/60 backdrop-blur-sm overflow-y-auto">
+          <div className="bg-[#FAF7F2] border border-[#EAE5DC] text-slate-900 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl space-y-6 relative my-auto max-h-[calc(100dvh-2rem)] overflow-y-auto">
             <button
               onClick={() => setActiveModal(null)}
               className="absolute top-5 right-5 text-slate-500 hover:text-slate-900 p-2 rounded-full hover:bg-[#EAE5DC]/60 transition cursor-pointer"
@@ -701,8 +701,8 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenAuthModal }) =
 
       {/* 6. DOCUMENTATION MODAL */}
       {activeModal === 'docs' && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm overflow-y-auto">
-          <div className="bg-[#FAF7F2] border border-[#EAE5DC] text-slate-900 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl space-y-6 relative my-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/60 backdrop-blur-sm overflow-y-auto">
+          <div className="bg-[#FAF7F2] border border-[#EAE5DC] text-slate-900 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl space-y-6 relative my-auto max-h-[calc(100dvh-2rem)] overflow-y-auto">
             <button
               onClick={() => setActiveModal(null)}
               className="absolute top-5 right-5 text-slate-500 hover:text-slate-900 p-2 rounded-full hover:bg-[#EAE5DC]/60 transition cursor-pointer"
@@ -770,8 +770,8 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenAuthModal }) =
 
       {/* 7. PRIVACY POLICY MODAL */}
       {activeModal === 'privacy' && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm overflow-y-auto">
-          <div className="bg-[#FAF7F2] border border-[#EAE5DC] text-slate-900 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl space-y-6 relative my-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/60 backdrop-blur-sm overflow-y-auto">
+          <div className="bg-[#FAF7F2] border border-[#EAE5DC] text-slate-900 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl space-y-6 relative my-auto max-h-[calc(100dvh-2rem)] overflow-y-auto">
             <button
               onClick={() => setActiveModal(null)}
               className="absolute top-5 right-5 text-slate-500 hover:text-slate-900 p-2 rounded-full hover:bg-[#EAE5DC]/60 transition cursor-pointer"
@@ -821,8 +821,8 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenAuthModal }) =
 
       {/* 8. TERMS OF SERVICE MODAL */}
       {activeModal === 'terms' && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm overflow-y-auto">
-          <div className="bg-[#FAF7F2] border border-[#EAE5DC] text-slate-900 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl space-y-6 relative my-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/60 backdrop-blur-sm overflow-y-auto">
+          <div className="bg-[#FAF7F2] border border-[#EAE5DC] text-slate-900 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl space-y-6 relative my-auto max-h-[calc(100dvh-2rem)] overflow-y-auto">
             <button
               onClick={() => setActiveModal(null)}
               className="absolute top-5 right-5 text-slate-500 hover:text-slate-900 p-2 rounded-full hover:bg-[#EAE5DC]/60 transition cursor-pointer"

@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react';
-import { Opportunity, Currency } from '../types';
+import React, { useState, useRef, useEffect } from 'react';
+import { Opportunity, Currency, UserProfile } from '../types';
 import { formatCurrency } from '../utils/formatters';
 import { filterSpamOpportunities } from '../utils/spamFilter';
 import {
@@ -23,6 +23,7 @@ interface OpportunitiesBoardProps {
   opportunities: Opportunity[];
   displayCurrency: Currency;
   searchQuery?: string;
+  currentUser?: UserProfile | null;
   onApply: (opportunity: Opportunity) => void;
   onAddOpportunities?: (newOpps: Opportunity[]) => void;
 }
@@ -31,6 +32,7 @@ export const OpportunitiesBoard: React.FC<OpportunitiesBoardProps> = ({
   opportunities,
   displayCurrency,
   searchQuery = '',
+  currentUser,
   onApply,
   onAddOpportunities,
 }) => {
@@ -39,7 +41,11 @@ export const OpportunitiesBoard: React.FC<OpportunitiesBoardProps> = ({
   const [appliedModalOpp, setAppliedModalOpp] = useState<Opportunity | null>(null);
   const [ashbyModalOpp, setAshbyModalOpp] = useState<Opportunity | null>(null);
   const [proposalText, setProposalText] = useState('');
-  const [portfolioLink, setPortfolioLink] = useState('https://github.com/rafael-dev');
+  const [portfolioLink, setPortfolioLink] = useState(
+    currentUser?.githubVerified && currentUser.githubUsername
+      ? `https://github.com/${currentUser.githubUsername}`
+      : ''
+  );
   const [appliedSuccess, setAppliedSuccess] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
   const lastSyncRef = useRef<number>(0);
@@ -56,14 +62,28 @@ export const OpportunitiesBoard: React.FC<OpportunitiesBoardProps> = ({
     skills: string[];
     isPublished: boolean;
   }>({
-    name: 'obi michael',
-    title: 'Senior Full-Stack & ZK Cryptography Engineer',
+    name: currentUser?.name || '',
+    title: currentUser?.role === 'organization' ? 'Organization Contributor' : 'Full-Stack Developer',
     category: 'Full-Stack Development',
     hourlyRate: '$85/hr',
-    bio: 'Experienced open-source core maintainer specializing in TypeScript, React, Rust, and secure milestone escrow protocols.',
-    skills: ['TypeScript', 'React', 'Security', 'DevOps'],
-    isPublished: true,
+    bio: currentUser?.bio || '',
+    skills: currentUser?.skills || ['TypeScript', 'React'],
+    isPublished: false,
   });
+
+  useEffect(() => {
+    if (currentUser) {
+      setTalentProfile(prev => ({
+        ...prev,
+        name: currentUser.name || prev.name,
+        bio: currentUser.bio || prev.bio,
+        skills: currentUser.skills && currentUser.skills.length > 0 ? currentUser.skills : prev.skills,
+      }));
+      if (currentUser.githubVerified && currentUser.githubUsername) {
+        setPortfolioLink(`https://github.com/${currentUser.githubUsername}`);
+      }
+    }
+  }, [currentUser]);
   const [tempSkillInput, setTempSkillInput] = useState('');
   const [profileSuccess, setProfileSuccess] = useState(false);
 
@@ -417,8 +437,8 @@ export const OpportunitiesBoard: React.FC<OpportunitiesBoardProps> = ({
 
       {/* Apply Modal */}
       {appliedModalOpp && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white border border-slate-200 rounded-3xl max-w-md w-full p-8 shadow-2xl text-slate-900 relative text-left">
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+          <div className="bg-white border border-slate-200 rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl text-slate-900 relative text-left max-h-[calc(100dvh-2rem)] overflow-y-auto my-auto">
             <div className="flex items-center justify-between border-b border-slate-100 pb-5">
               <div>
                 <span className="text-[10px] font-bold text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-lg border border-indigo-100">{appliedModalOpp.type}</span>
@@ -488,8 +508,8 @@ export const OpportunitiesBoard: React.FC<OpportunitiesBoardProps> = ({
 
       {/* Talent Profile Upload / Edit Modal */}
       {showProfileModal && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white border border-slate-200 rounded-3xl max-w-lg w-full p-8 shadow-2xl text-slate-900 relative text-left">
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+          <div className="bg-white border border-slate-200 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl text-slate-900 relative text-left max-h-[calc(100dvh-2rem)] overflow-y-auto my-auto">
             <div className="flex items-center justify-between border-b border-slate-100 pb-5">
               <div>
                 <span className="text-[10px] font-bold text-cyan-700 bg-cyan-50 px-2.5 py-1 rounded-lg border border-cyan-100">Talent Marketplace</span>
@@ -636,8 +656,8 @@ export const OpportunitiesBoard: React.FC<OpportunitiesBoardProps> = ({
 
       {/* Post New Funded Job / Bounty Modal */}
       {showPostBountyModal && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white border border-slate-200 rounded-3xl max-w-lg w-full p-8 shadow-2xl text-slate-900 relative text-left">
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+          <div className="bg-white border border-slate-200 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl text-slate-900 relative text-left max-h-[calc(100dvh-2rem)] overflow-y-auto my-auto">
             <div className="flex items-center justify-between border-b border-slate-100 pb-5">
               <div>
                 <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-100">Escrow-Backed Posting</span>

@@ -24,7 +24,7 @@ export const FundingModal: React.FC<FundingModalProps> = ({
     displayCurrency === 'NGN' ? 10000 : displayCurrency === 'KES' ? 1000 : 50
   );
   const [funderName, setFunderName] = useState(currentUser?.name || 'Community Donor');
-  const [funderEmail, setFunderEmail] = useState(currentUser?.email || 'donor@openimpact.io');
+  const [funderEmail, setFunderEmail] = useState(currentUser?.email || 'donor@openimpactglobal.org');
   
   // Dynamic Matching Sponsor options
   const sponsorOptions = [
@@ -78,8 +78,8 @@ export const FundingModal: React.FC<FundingModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-start sm:items-center justify-center p-3 sm:p-6 overflow-y-auto">
-      <div className="bg-white border border-slate-200/90 rounded-2xl max-w-lg w-full p-6 shadow-2xl text-slate-900 relative overflow-hidden my-8 mx-auto text-left font-sans">
+    <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+      <div className="bg-white border border-slate-200/90 rounded-2xl max-w-lg w-full p-6 shadow-2xl text-slate-900 relative max-h-[calc(100dvh-2rem)] overflow-y-auto my-auto mx-auto text-left font-sans">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-slate-100 pb-4">
           <div>

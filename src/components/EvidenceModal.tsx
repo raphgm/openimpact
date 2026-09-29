@@ -524,8 +524,8 @@ export const EvidenceModal: React.FC<EvidenceModalProps> = ({
   });
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
-      <div className="bg-white border border-slate-200/90 rounded-2xl max-w-4xl w-full p-5 sm:p-6 shadow-2xl text-slate-900 relative overflow-hidden my-auto text-left font-sans space-y-5">
+    <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+      <div className="bg-white border border-slate-200/90 rounded-2xl max-w-4xl w-full p-5 sm:p-6 shadow-2xl text-slate-900 relative max-h-[calc(100dvh-2rem)] overflow-y-auto my-auto text-left font-sans space-y-5">
         
         {/* Modal Top Header Bar */}
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">

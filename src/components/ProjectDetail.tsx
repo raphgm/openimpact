@@ -162,12 +162,13 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({
   return (
     <div className="space-y-6 text-slate-900 pb-12">
       {/* Back button & top bar */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <button
           onClick={onBack}
-          className="flex items-center space-x-2 text-xs font-bold text-slate-600 hover:text-indigo-600 bg-white px-3 py-1.5 rounded-lg border border-slate-200 shadow-xs transition cursor-pointer"
+          className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 hover:text-slate-900 bg-white hover:bg-slate-50 px-2.5 py-1 rounded-md border border-slate-200 shadow-2xs transition-colors cursor-pointer whitespace-nowrap shrink-0 h-7"
+          title="Back to Projects"
         >
-          <ArrowLeft className="h-4 w-4" />
+          <ArrowLeft className="h-3.5 w-3.5 text-slate-400 stroke-[1.75]" />
           <span>Back to Projects</span>
         </button>
 

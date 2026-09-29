@@ -25,15 +25,16 @@ import {
   Filter,
   Check
 } from 'lucide-react';
-import { Project, UserProfile } from '../types';
+import { Project, UserProfile, ExportedGithubData } from '../types';
 import { formatCurrency } from '../utils/formatters';
 
 interface ProofContributionModalProps {
   isOpen: boolean;
   onClose: () => void;
   projects?: Project[];
-  currentUser?: UserProfile;
+  currentUser?: UserProfile | null;
   initialProject?: Project | null;
+  exportedGithub?: ExportedGithubData | null;
 }
 
 interface RepoContribution {
@@ -47,30 +48,339 @@ interface RepoContribution {
   status: 'Merged & Verified' | 'Signed & Audited';
 }
 
+const DEFAULT_REPO_CONTRIBUTIONS: RepoContribution[] = [
+  {
+    id: 'c1',
+    type: 'pr',
+    title: 'feat(escrow): implement multi-currency fiat & crypto payout bridge router',
+    hashOrPr: 'PR #142',
+    additions: 432,
+    deletions: 58,
+    date: 'May 12, 2026',
+    status: 'Merged & Verified',
+  },
+  {
+    id: 'c2',
+    type: 'pr',
+    title: 'fix(security): sanitize WebAuthn signature payloads & verify peer-audit multi-sig threshold',
+    hashOrPr: 'PR #141',
+    additions: 189,
+    deletions: 42,
+    date: 'May 14, 2026',
+    status: 'Merged & Verified',
+  },
+  {
+    id: 'c3',
+    type: 'commit',
+    title: 'chore(ci): automated OpenProof webhook attestations for verified PR merges',
+    hashOrPr: '0x8f3a92b',
+    additions: 94,
+    deletions: 12,
+    date: 'May 16, 2026',
+    status: 'Signed & Audited',
+  },
+  {
+    id: 'c4',
+    type: 'pr',
+    title: 'docs(escrow): add milestone delivery guidelines & 501(c)(6) audit documentation',
+    hashOrPr: 'PR #138',
+    additions: 310,
+    deletions: 25,
+    date: 'May 18, 2026',
+    status: 'Merged & Verified',
+  },
+  {
+    id: 'c5',
+    type: 'commit',
+    title: 'refactor(api): optimize PostgreSQL query performance for collective expense ledgers',
+    hashOrPr: '0x9b2e11d',
+    additions: 156,
+    deletions: 89,
+    date: 'May 20, 2026',
+    status: 'Signed & Audited',
+  },
+  {
+    id: 'c6',
+    type: 'commit',
+    title: 'test(contracts): add zero-knowledge proof verification test suites for escrow unlock',
+    hashOrPr: '0x4c8a17e',
+    additions: 275,
+    deletions: 18,
+    date: 'May 22, 2026',
+    status: 'Signed & Audited',
+  },
+];
+
+function generateContributionsForRepo(
+  repoName: string,
+  contributor: string,
+  customPr?: string,
+  customTitle?: string
+): RepoContribution[] {
+  const cleanRepo = repoName.replace(/^https?:\/\/github\.com\//i, '').replace(/\.git$/i, '');
+  const repoLower = cleanRepo.toLowerCase();
+
+  if (repoLower.includes('fastapi')) {
+    return [
+      {
+        id: 'fastapi_pr_1',
+        type: 'pr',
+        title: customTitle || 'feat(routing): upgrade async middleware & dependency injection router',
+        hashOrPr: customPr || 'PR #10000',
+        additions: 384,
+        deletions: 42,
+        date: 'Recent',
+        status: 'Merged & Verified',
+      },
+      {
+        id: 'fastapi_pr_2',
+        type: 'pr',
+        title: 'fix(security): sanitize OAuth2 scopes & cryptographic token validation',
+        hashOrPr: 'PR #9940',
+        additions: 142,
+        deletions: 18,
+        date: 'Recent',
+        status: 'Merged & Verified',
+      },
+      {
+        id: 'fastapi_c_1',
+        type: 'commit',
+        title: 'docs(tutorial): add comprehensive OpenProof verification and milestone escrow tutorials',
+        hashOrPr: '0x9e4a1b',
+        additions: 512,
+        deletions: 22,
+        date: 'Recent',
+        status: 'Signed & Audited',
+      },
+      {
+        id: 'fastapi_pr_3',
+        type: 'pr',
+        title: 'perf(schema): optimize Pydantic v2 OpenAPI generation throughput by 4x',
+        hashOrPr: 'PR #9820',
+        additions: 260,
+        deletions: 64,
+        date: 'Recent',
+        status: 'Merged & Verified',
+      },
+    ];
+  }
+
+  if (repoLower.includes('react')) {
+    return [
+      {
+        id: 'react_pr_1',
+        type: 'pr',
+        title: customTitle || 'feat(compiler): React 19 memoization & action state transitions',
+        hashOrPr: customPr || 'PR #28000',
+        additions: 612,
+        deletions: 74,
+        date: 'Recent',
+        status: 'Merged & Verified',
+      },
+      {
+        id: 'react_pr_2',
+        type: 'pr',
+        title: 'fix(hydration): reconcile suspended server boundary streams without client flicker',
+        hashOrPr: 'PR #27840',
+        additions: 210,
+        deletions: 33,
+        date: 'Recent',
+        status: 'Merged & Verified',
+      },
+      {
+        id: 'react_c_1',
+        type: 'commit',
+        title: 'test(runtime): unit tests for async transition priorities and concurrent scheduler',
+        hashOrPr: '0x4d91e8',
+        additions: 345,
+        deletions: 19,
+        date: 'Recent',
+        status: 'Signed & Audited',
+      },
+    ];
+  }
+
+  const parts = cleanRepo.split('/');
+  const repoShort = parts[1] || cleanRepo;
+
+  return [
+    {
+      id: 'c_r1',
+      type: 'pr',
+      title: customTitle || `feat(${repoShort}): milestone deliverable release for ${cleanRepo}`,
+      hashOrPr: customPr || 'PR #142',
+      additions: 432,
+      deletions: 58,
+      date: 'Recent',
+      status: 'Merged & Verified',
+    },
+    {
+      id: 'c_r2',
+      type: 'pr',
+      title: `fix(security): sanitize WebAuthn signature payloads & verify peer-audit multi-sig threshold`,
+      hashOrPr: 'PR #141',
+      additions: 189,
+      deletions: 42,
+      date: 'Recent',
+      status: 'Merged & Verified',
+    },
+    {
+      id: 'c_r3',
+      type: 'commit',
+      title: `chore(ci): automated OpenProof webhook attestations for verified PR merges`,
+      hashOrPr: '0x8f3a92b',
+      additions: 94,
+      deletions: 12,
+      date: 'Recent',
+      status: 'Signed & Audited',
+    },
+    {
+      id: 'c_r4',
+      type: 'pr',
+      title: `docs(escrow): add milestone delivery guidelines & 501(c)(6) audit documentation`,
+      hashOrPr: 'PR #138',
+      additions: 310,
+      deletions: 25,
+      date: 'Recent',
+      status: 'Merged & Verified',
+    },
+  ];
+}
+
 export const ProofContributionModal: React.FC<ProofContributionModalProps> = ({
   isOpen,
   onClose,
   projects = [],
   currentUser,
   initialProject,
+  exportedGithub,
 }) => {
-  const [repoInput, setRepoInput] = useState<string>('tiangolo/fastapi');
-  const [contributorName, setContributorName] = useState<string>(currentUser?.name || 'DevCreator_2026');
-  const [contributorHandle, setContributorHandle] = useState<string>(currentUser?.githubHandle || '@devcreator');
-  const [organizationName, setOrganizationName] = useState<string>('OpenImpact Foundation (501c6)');
-  const [selectedProject, setSelectedProject] = useState<Project | null>(projects[0] || null);
+  const resolveUserHandle = (user?: UserProfile | null) => {
+    if (user?.githubUsername) return `@${user.githubUsername.replace(/^@/, '')}`;
+    if (user?.handle) return `@${user.handle.replace(/^@/, '')}`;
+    return '@contributor';
+  };
 
+  const resolveInitialRepo = () => {
+    if (exportedGithub?.repo) return exportedGithub.repo.replace(/^https?:\/\/github\.com\//i, '').replace(/\.git$/i, '');
+    if (initialProject?.githubRepo) return initialProject.githubRepo.replace(/^https?:\/\/github\.com\//i, '').replace(/\.git$/i, '');
+    if (projects[0]?.githubRepo) return projects[0].githubRepo.replace(/^https?:\/\/github\.com\//i, '').replace(/\.git$/i, '');
+    return 'openimpact/pay-bridge';
+  };
+
+  const resolveInitialContributorName = () => {
+    if (exportedGithub?.contributorName) return exportedGithub.contributorName;
+    if (currentUser?.name) return currentUser.name;
+    return 'OpenImpact Contributor';
+  };
+
+  const resolveInitialContributorHandle = () => {
+    if (exportedGithub?.contributorHandle) {
+      return exportedGithub.contributorHandle.startsWith('@') ? exportedGithub.contributorHandle : `@${exportedGithub.contributorHandle}`;
+    }
+    return resolveUserHandle(currentUser);
+  };
+
+  const [repoInput, setRepoInput] = useState<string>(resolveInitialRepo);
+  const [contributorName, setContributorName] = useState<string>(resolveInitialContributorName);
+  const [contributorHandle, setContributorHandle] = useState<string>(resolveInitialContributorHandle);
+  const [organizationName, setOrganizationName] = useState<string>('OpenImpact Foundation (501c6)');
+  const [selectedProject, setSelectedProject] = useState<Project | null>(initialProject || projects[0] || null);
+
+  // Contributions state from current repo
+  const [repoContributions, setRepoContributions] = useState<RepoContribution[]>(DEFAULT_REPO_CONTRIBUTIONS);
+  const [selectedContributionIds, setSelectedContributionIds] = useState<string[]>(
+    DEFAULT_REPO_CONTRIBUTIONS.map((c) => c.id)
+  );
+
+  // Synchronize when modal opens or when exported GitHub / project / currentUser changes
   useEffect(() => {
+    if (!isOpen) return;
+
+    if (exportedGithub) {
+      if (exportedGithub.repo) {
+        setRepoInput(exportedGithub.repo.replace(/^https?:\/\/github\.com\//i, '').replace(/\.git$/i, ''));
+      }
+      if (exportedGithub.contributorName) {
+        setContributorName(exportedGithub.contributorName);
+      } else if (currentUser?.name) {
+        setContributorName(currentUser.name);
+      }
+      if (exportedGithub.contributorHandle) {
+        setContributorHandle(
+          exportedGithub.contributorHandle.startsWith('@')
+            ? exportedGithub.contributorHandle
+            : `@${exportedGithub.contributorHandle}`
+        );
+      } else if (currentUser) {
+        setContributorHandle(resolveUserHandle(currentUser));
+      }
+
+      if (exportedGithub.contributions && exportedGithub.contributions.length > 0) {
+        setRepoContributions(exportedGithub.contributions);
+        setSelectedContributionIds(exportedGithub.contributions.map((c) => c.id));
+      } else if (exportedGithub.prTitle || exportedGithub.prNumber) {
+        const exportedPrItem: RepoContribution = {
+          id: `c_exp_${Date.now()}`,
+          type: 'pr',
+          title: exportedGithub.prTitle || `Deliverable for ${exportedGithub.repo}`,
+          hashOrPr: exportedGithub.prNumber || 'PR #10000',
+          additions: exportedGithub.additions ?? 384,
+          deletions: exportedGithub.deletions ?? 42,
+          date: exportedGithub.date || 'Recent',
+          status: exportedGithub.status || 'Merged & Verified',
+        };
+        const companionItems = generateContributionsForRepo(
+          exportedGithub.repo,
+          exportedGithub.contributorName || 'contributor',
+          exportedGithub.prNumber,
+          exportedGithub.prTitle
+        );
+        const mergedList = [
+          exportedPrItem,
+          ...companionItems.filter((item) => item.hashOrPr !== exportedPrItem.hashOrPr),
+        ];
+        setRepoContributions(mergedList);
+        setSelectedContributionIds(mergedList.map((item) => item.id));
+      } else {
+        const generated = generateContributionsForRepo(
+          exportedGithub.repo,
+          exportedGithub.contributorName || 'contributor'
+        );
+        setRepoContributions(generated);
+        setSelectedContributionIds(generated.map((item) => item.id));
+      }
+      return;
+    }
+
     if (initialProject) {
       setSelectedProject(initialProject);
       if (initialProject.githubRepo) {
-        const cleanRepo = initialProject.githubRepo.replace(/https?:\/\/github\.com\//i, '').replace(/\.git$/i, '');
+        const cleanRepo = initialProject.githubRepo.replace(/^https?:\/\/github\.com\//i, '').replace(/\.git$/i, '');
         setRepoInput(cleanRepo);
+        const generated = generateContributionsForRepo(
+          cleanRepo,
+          currentUser?.name || initialProject.organization.name
+        );
+        setRepoContributions(generated);
+        setSelectedContributionIds(generated.map((item) => item.id));
       } else {
         setRepoInput(initialProject.title);
       }
+      if (currentUser?.name) {
+        setContributorName(currentUser.name);
+      }
+      if (currentUser) {
+        setContributorHandle(resolveUserHandle(currentUser));
+      }
+      return;
     }
-  }, [initialProject]);
+
+    if (currentUser) {
+      if (currentUser.name) setContributorName(currentUser.name);
+      setContributorHandle(resolveUserHandle(currentUser));
+    }
+  }, [isOpen, exportedGithub, initialProject, currentUser]);
 
   const [copied, setCopied] = useState(false);
   const [copiedBadge, setCopiedBadge] = useState(false);
@@ -122,80 +432,6 @@ export const ProofContributionModal: React.FC<ProofContributionModalProps> = ({
     }
   };
 
-  // Contributions state from current repo
-  const [repoContributions, setRepoContributions] = useState<RepoContribution[]>([
-    {
-      id: 'c1',
-      type: 'pr',
-      title: 'feat(escrow): implement multi-currency fiat & crypto payout bridge router',
-      hashOrPr: 'PR #142',
-      additions: 432,
-      deletions: 58,
-      date: 'May 12, 2026',
-      status: 'Merged & Verified',
-    },
-    {
-      id: 'c2',
-      type: 'pr',
-      title: 'fix(security): sanitize WebAuthn signature payloads & verify peer-audit multi-sig threshold',
-      hashOrPr: 'PR #141',
-      additions: 189,
-      deletions: 42,
-      date: 'May 14, 2026',
-      status: 'Merged & Verified',
-    },
-    {
-      id: 'c3',
-      type: 'commit',
-      title: 'chore(ci): automated OpenProof webhook attestations for verified PR merges',
-      hashOrPr: '0x8f3a92b',
-      additions: 94,
-      deletions: 12,
-      date: 'May 16, 2026',
-      status: 'Signed & Audited',
-    },
-    {
-      id: 'c4',
-      type: 'pr',
-      title: 'docs(escrow): add milestone delivery guidelines & 501(c)(6) audit documentation',
-      hashOrPr: 'PR #138',
-      additions: 310,
-      deletions: 25,
-      date: 'May 18, 2026',
-      status: 'Merged & Verified',
-    },
-    {
-      id: 'c5',
-      type: 'commit',
-      title: 'refactor(api): optimize PostgreSQL query performance for collective expense ledgers',
-      hashOrPr: '0x9b2e11d',
-      additions: 156,
-      deletions: 89,
-      date: 'May 20, 2026',
-      status: 'Signed & Audited',
-    },
-    {
-      id: 'c6',
-      type: 'commit',
-      title: 'test(contracts): add zero-knowledge proof verification test suites for escrow unlock',
-      hashOrPr: '0x4c8a17e',
-      additions: 275,
-      deletions: 18,
-      date: 'May 22, 2026',
-      status: 'Signed & Audited',
-    },
-  ]);
-
-  // Selected contributions for Proof of Work certificate - default ALL selected!
-  const [selectedContributionIds, setSelectedContributionIds] = useState<string[]>([
-    'c1',
-    'c2',
-    'c3',
-    'c4',
-    'c5',
-    'c6',
-  ]);
-
   if (!isOpen) return null;
 
   const certificateId = `OP-CERT-2026-${Math.floor(100000 + Math.random() * 900000)}`;
@@ -211,59 +447,18 @@ export const ProofContributionModal: React.FC<ProofContributionModalProps> = ({
     setIsAuditing(true);
     setTimeout(() => {
       setIsAuditing(false);
+      const cleanInput = repoInput.replace(/^https?:\/\/github\.com\//i, '').replace(/\.git$/i, '');
       const matched = projects.find(
         (p) =>
-          p.githubRepo.toLowerCase().includes(repoInput.toLowerCase()) ||
-          p.title.toLowerCase().includes(repoInput.toLowerCase())
+          (p.githubRepo && p.githubRepo.toLowerCase().includes(cleanInput.toLowerCase())) ||
+          p.title.toLowerCase().includes(cleanInput.toLowerCase())
       );
       if (matched) {
         setSelectedProject(matched);
       }
-      // Re-populate mock contributions for this repo
-      const newItems: RepoContribution[] = [
-        {
-          id: 'c_r1',
-          type: 'pr',
-          title: `feat(core): milestone feature release for ${repoInput}`,
-          hashOrPr: 'PR #89',
-          additions: 512,
-          deletions: 64,
-          date: 'Recent',
-          status: 'Merged & Verified',
-        },
-        {
-          id: 'c_r2',
-          type: 'pr',
-          title: `fix(auth): passkey authentication and zero-knowledge proof router`,
-          hashOrPr: 'PR #92',
-          additions: 240,
-          deletions: 31,
-          date: 'Recent',
-          status: 'Merged & Verified',
-        },
-        {
-          id: 'c_r3',
-          type: 'commit',
-          title: `ci(actions): automated OpenProof verification on repository push`,
-          hashOrPr: '0xa4e912',
-          additions: 118,
-          deletions: 14,
-          date: 'Recent',
-          status: 'Signed & Audited',
-        },
-        {
-          id: 'c_r4',
-          type: 'commit',
-          title: `perf(ledger): optimize SQLite / PostgreSQL indexing for transparency ledger`,
-          hashOrPr: '0xb7d351',
-          additions: 320,
-          deletions: 45,
-          date: 'Recent',
-          status: 'Signed & Audited',
-        },
-      ];
+      const newItems = generateContributionsForRepo(cleanInput, contributorName);
       setRepoContributions(newItems);
-      setSelectedContributionIds(newItems.map((i) => i.id)); // Select all by default!
+      setSelectedContributionIds(newItems.map((i) => i.id));
     }, 600);
   };
 
@@ -373,7 +568,20 @@ export const ProofContributionModal: React.FC<ProofContributionModalProps> = ({
           {/* Audit Controls Bar */}
           <div className="bg-white p-4 rounded-xl border border-[#E8E2D6] shadow-2xs space-y-3">
             <div className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center justify-between">
-              <span>Repository & Contributor Settings</span>
+              <span className="flex items-center gap-2">
+                <span>Repository & Contributor Settings</span>
+                {exportedGithub && (
+                  <span className="text-[10px] font-mono text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full font-bold normal-case flex items-center gap-1">
+                    <Check className="h-3 w-3" />
+                    <span>Inherited from GitHub Export</span>
+                  </span>
+                )}
+                {!exportedGithub && currentUser?.githubVerified && (
+                  <span className="text-[10px] font-mono text-indigo-700 bg-indigo-50 border border-indigo-200 px-2 py-0.5 rounded-full font-bold normal-case">
+                    Verified GitHub Identity
+                  </span>
+                )}
+              </span>
               <span className="text-slate-500 font-normal">Audit target</span>
             </div>
             <form onSubmit={handleAuditRepo} className="grid grid-cols-1 sm:grid-cols-3 gap-3">

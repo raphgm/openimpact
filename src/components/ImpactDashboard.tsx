@@ -40,12 +40,12 @@ export const ImpactDashboard: React.FC<ImpactDashboardProps> = ({
   const [activeTab, setActiveTab] = useState<'timeline' | 'categories'>('timeline');
   const [metricMode, setMetricMode] = useState<'points' | 'count'>('points');
 
-  const impactScore = currentUser.reputation.impactScore || 50;
-  const verifiedCount = Math.max(
-    currentUser.reputation.verifiedContributionsCount || 0,
-    userEvidence.length
-  );
-  const completedProjects = currentUser.reputation.completedProjectsCount || 1;
+  const impactScore = currentUser.reputation.impactScore || 0;
+  const verifiedCount =
+    currentUser.reputation.verifiedContributionsCount > 0
+      ? currentUser.reputation.verifiedContributionsCount
+      : (userEvidence || []).filter((e: any) => e.status === 'Verified').length;
+  const completedProjects = currentUser.reputation.completedProjectsCount || 0;
   const bountiesCount = currentUser.reputation.completedBountiesCount || 0;
   const communityHours = currentUser.reputation.communityHours || 0;
   const peopleTrained = currentUser.reputation.peopleTrained || 0;
@@ -85,26 +85,34 @@ export const ImpactDashboard: React.FC<ImpactDashboardProps> = ({
       };
     }
     return {
-      label: 'Emerging Candidate',
+      label: 'Emerging Contributor',
       color: 'text-slate-700 bg-slate-50 border-slate-200',
       nextTarget: 50,
       percentile: 'Initial Registration',
     };
   }, [impactScore]);
 
-  // Generate 6-month historical timeline data proportional to user's real stats
+  // Generate 6-month historical timeline data based on real contributions
   const timelineData = useMemo(() => {
     const months = ['Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr'];
-    // Weight factors across 6 months showing steady growth
+    const totalActivity = verifiedCount + bountiesCount + completedProjects;
+
+    if (totalActivity === 0) {
+      return months.map((month) => ({
+        period: month,
+        impactPoints: 0,
+        contributions: 0,
+        cumulative: impactScore,
+        verifiedProofs: 0,
+      }));
+    }
+
     const weights = [0.08, 0.12, 0.15, 0.18, 0.22, 0.25];
 
     return months.map((month, idx) => {
       const weight = weights[idx];
       const monthlyPoints = Math.round(impactScore * weight * 1.4);
-      const monthlyContributions = Math.max(
-        1,
-        Math.round((verifiedCount + bountiesCount + completedProjects) * weight * 1.2)
-      );
+      const monthlyContributions = Math.round(totalActivity * weight * 1.5);
       const cumulativeScore = Math.min(
         impactScore,
         Math.round(impactScore * (0.35 + idx * 0.13))
@@ -115,42 +123,43 @@ export const ImpactDashboard: React.FC<ImpactDashboardProps> = ({
         impactPoints: monthlyPoints,
         contributions: monthlyContributions,
         cumulative: cumulativeScore,
-        verifiedProofs: Math.max(0, Math.round(verifiedCount * weight * 1.5)),
+        verifiedProofs: Math.round(verifiedCount * weight * 1.5),
       };
     });
   }, [impactScore, verifiedCount, bountiesCount, completedProjects]);
 
   // Category breakdown data
   const categoryData = useMemo(() => {
+    const hasActivity = verifiedCount > 0 || bountiesCount > 0 || completedProjects > 0;
     return [
       {
         category: 'Code & PRs',
-        contributions: Math.max(2, bountiesCount * 3 + (verifiedCount > 0 ? 3 : 1)),
-        impactPoints: Math.round(impactScore * 0.35),
+        contributions: bountiesCount * 3 + (verifiedCount > 0 ? Math.ceil(verifiedCount * 0.5) : 0),
+        impactPoints: hasActivity ? Math.round(impactScore * 0.35) : 0,
         fill: '#0B1E48',
       },
       {
         category: 'Peer Audits',
-        contributions: Math.max(1, verifiedCount),
-        impactPoints: Math.round(impactScore * 0.25),
+        contributions: verifiedCount > 0 ? Math.ceil(verifiedCount * 0.3) : 0,
+        impactPoints: hasActivity ? Math.round(impactScore * 0.25) : 0,
         fill: '#4F46E5',
       },
       {
         category: 'Milestones',
-        contributions: Math.max(1, completedProjects * 2),
-        impactPoints: Math.round(impactScore * 0.2),
+        contributions: completedProjects,
+        impactPoints: hasActivity ? Math.round(impactScore * 0.2) : 0,
         fill: '#0284C7',
       },
       {
         category: 'Leadership & Tenure',
-        contributions: Math.max(1, userTenures.length > 0 ? userTenures.length * 4 : 2),
-        impactPoints: Math.round(impactScore * 0.12),
+        contributions: userTenures.length,
+        impactPoints: userTenures.length > 0 ? Math.round(impactScore * 0.12) : 0,
         fill: '#10B981',
       },
       {
         category: 'Community Hours',
-        contributions: Math.max(1, Math.round(communityHours / 10) || 2),
-        impactPoints: Math.round(impactScore * 0.08),
+        contributions: Math.round(communityHours / 10),
+        impactPoints: communityHours > 0 ? Math.round(impactScore * 0.08) : 0,
         fill: '#F59E0B',
       },
     ];
@@ -324,7 +333,7 @@ export const ImpactDashboard: React.FC<ImpactDashboardProps> = ({
             <Zap className="h-4 w-4 text-amber-500" />
           </div>
           <div className="text-3xl font-black text-slate-900 font-mono tracking-tight">
-            +{Math.max(12, Math.round(impactScore * 0.28))}
+            +{verifiedCount > 0 ? Math.round(impactScore * 0.28) : 0}
           </div>
           <div className="text-[11px] font-semibold text-slate-500 mt-1">
             Points logged this cycle

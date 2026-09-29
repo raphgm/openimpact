@@ -18,6 +18,12 @@ export interface UserProfile {
   location: string;
   bio: string;
   skills: string[];
+  githubUsername?: string;
+  githubVerified?: boolean;
+  githubBoundAt?: string;
+  githubPublicRepos?: number;
+  openProofPassportId?: string;
+  openProofActive?: boolean;
   reputation: {
     verifiedContributionsCount: number;
     completedProjectsCount: number;
@@ -96,6 +102,29 @@ export interface Evidence {
   verifier?: string;
   status: 'Verified' | 'Pending' | 'Flagged';
   description?: string;
+}
+
+export interface ExportedGithubData {
+  repo: string;
+  contributorName?: string;
+  contributorHandle?: string;
+  prTitle?: string;
+  prUrl?: string;
+  prNumber?: string;
+  additions?: number;
+  deletions?: number;
+  date?: string;
+  status?: 'Merged & Verified' | 'Signed & Audited';
+  contributions?: {
+    id: string;
+    type: 'pr' | 'commit';
+    title: string;
+    hashOrPr: string;
+    additions: number;
+    deletions: number;
+    date: string;
+    status: 'Merged & Verified' | 'Signed & Audited';
+  }[];
 }
 
 export type ProjectStatus = 'Funding' | 'In Progress' | 'Completed' | 'Verified';

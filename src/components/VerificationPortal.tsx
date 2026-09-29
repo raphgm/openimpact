@@ -89,7 +89,7 @@ export interface VerificationRequest {
 
 interface VerificationPortalProps {
   projects: Project[];
-  currentUser: UserProfile;
+  currentUser: UserProfile | null;
   onOpenProofVerification?: () => void;
   onOpenDocumentViewer?: (url?: string, title?: string) => void;
   onViewLedger?: () => void;
@@ -207,15 +207,16 @@ export const VerificationPortal: React.FC<VerificationPortalProps> = ({
   const [auditorKeyError, setAuditorKeyError] = useState<string>('');
 
   // Check if current user is inherently authorized by role or proven community impact
-  const isPrivilegedRole = currentUser.role === 'grant_admin' || currentUser.role === 'organization';
-  const hasHighReputation = (currentUser.reputation?.impactScore ?? 0) >= 50;
-  const isAuditorAuthorized = isPrivilegedRole || hasHighReputation || auditorCredentialUnlocked;
+  const isPrivilegedRole = currentUser?.role === 'grant_admin' || currentUser?.role === 'organization';
+  const hasHighReputation = (currentUser?.reputation?.impactScore ?? 0) >= 50;
+  const isAuditorAuthorized = Boolean(isPrivilegedRole || hasHighReputation || auditorCredentialUnlocked);
 
   // Conflict of Interest Protection: Submitter cannot audit or approve their own submission
   const isSelfAudit = Boolean(
     activeAuditRequest &&
     currentUser &&
     activeAuditRequest.submittedBy &&
+    currentUser.handle &&
     activeAuditRequest.submittedBy.toLowerCase().replace('@', '').trim() === currentUser.handle.toLowerCase().replace('@', '').trim()
   );
 
@@ -361,7 +362,7 @@ export const VerificationPortal: React.FC<VerificationPortalProps> = ({
       status: resolution,
       auditStepsCompleted: updatedSteps,
       auditorComments: auditorComments.trim(),
-      auditedBy: currentUser.handle || '@anonymous_auditor',
+      auditedBy: currentUser?.handle || '@anonymous_auditor',
       auditedAt: new Date().toISOString().split('T')[0],
       reputationAllocated: resolution === 'Approved' ? reputationAllocated : -reputationAllocated,
     };
@@ -410,7 +411,7 @@ export const VerificationPortal: React.FC<VerificationPortalProps> = ({
       source: newRequestSource,
       sourceId: newRequestSourceId,
       projectTitle: newRequestProj,
-      submittedBy: currentUser.handle || '@external_contributor',
+      submittedBy: currentUser?.handle || '@external_contributor',
       createdAt: new Date().toISOString().split('T')[0],
       description: newRequestDesc,
       status: 'Pending',
@@ -1120,10 +1121,18 @@ export const VerificationPortal: React.FC<VerificationPortalProps> = ({
                       {isAuditorAuthorized ? (
                         <div className="text-xs text-slate-600 space-y-1">
                           <p className="font-medium">
-                            Signed in as <strong className="text-slate-900">{currentUser.name}</strong> ({currentUser.handle}). You hold verified audit authority ({currentUser.role === 'grant_admin' ? 'Grant Administrator' : currentUser.role === 'organization' ? 'Fiscal Host Trustee' : hasHighReputation ? `Senior Community Auditor (Impact Score: ${currentUser.reputation.impactScore})` : 'Verified Peer Auditor'}).
+                            {currentUser ? (
+                              <>
+                                Signed in as <strong className="text-slate-900">{currentUser.name}</strong> ({currentUser.handle}). You hold verified audit authority ({currentUser.role === 'grant_admin' ? 'Grant Administrator' : currentUser.role === 'organization' ? 'Fiscal Host Trustee' : hasHighReputation ? `Senior Community Auditor (Impact Score: ${currentUser.reputation?.impactScore || 0})` : 'Verified Peer Auditor'}).
+                              </>
+                            ) : (
+                              <>
+                                You are signed in with an authorized peer auditor passkey. You hold verified audit authority as a Verified Peer Auditor.
+                              </>
+                            )}
                           </p>
                           <div className="flex items-center justify-between text-[10px] font-mono text-slate-400 pt-1">
-                            <span>Auditor Signing Key: SHA256:{currentUser.id.substring(0, 8)}...8f2b</span>
+                            <span>Auditor Signing Key: SHA256:{currentUser?.id ? currentUser.id.substring(0, 8) : 'PEER-KEY'}...8f2b</span>
                             <span className="text-emerald-700 font-bold">Consensus Quorum 1/1</span>
                           </div>
                         </div>
@@ -1287,8 +1296,8 @@ export const VerificationPortal: React.FC<VerificationPortalProps> = ({
 
       {/* 5. Original OpenProofInspector Detailed Inspect Modal */}
       {inspectEvidence && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white border border-slate-200 rounded-3xl max-w-xl w-full p-8 shadow-2xl text-slate-900 relative space-y-6 text-left">
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+          <div className="bg-white border border-slate-200 rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl text-slate-900 relative space-y-6 text-left max-h-[calc(100dvh-2rem)] overflow-y-auto my-auto">
             <div className="flex items-center justify-between border-b border-slate-100 pb-4">
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold">

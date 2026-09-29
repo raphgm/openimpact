@@ -200,13 +200,17 @@ export const ProjectList: React.FC<ProjectListProps> = ({
                   {isLiveStreamActive ? 'Real-Time Escrow Activity' : 'Escrow Activity Paused'}
                 </span>
               </div>
-              {latestLiveContribution && (
+              {latestLiveContribution ? (
                 <p className="text-sm text-slate-300 font-medium truncate mt-1 flex items-center space-x-1.5">
                   <Zap className="h-4 w-4 text-amber-400 shrink-0" />
                   <span className="truncate">
                     <strong>+{formatCurrency(latestLiveContribution.amount, latestLiveContribution.currency)}</strong> into{' '}
                     <span className="text-white font-bold">{latestLiveContribution.projectTitle}</span> by {latestLiveContribution.supporterName}
                   </span>
+                </p>
+              ) : (
+                <p className="text-xs text-slate-400 font-medium mt-0.5">
+                  All transactions and milestone releases backed 1:1 by non-profit escrow vaults and verified GitHub PRs.
                 </p>
               )}
             </div>

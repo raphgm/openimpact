@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Currency, Project, Opportunity, GrantProgram, UserProfile, Evidence, EvidenceType } from "./types";
+import { Currency, Project, Opportunity, GrantProgram, UserProfile, Evidence, EvidenceType, ExportedGithubData } from "./types";
 import { INITIAL_USER, INITIAL_PROJECTS, INITIAL_OPPORTUNITIES, INITIAL_GRANTS, INITIAL_COLLECTIVES, CURRENCY_RATES } from "./data/mockData";
 import { convertCurrency, formatCurrency } from "./utils/formatters";
 import { db, auth, onAuthStateChanged, getUserProfile, buildDefaultUserProfile, saveUserProfile, logoutUser } from "./lib/firebase";
@@ -369,6 +369,25 @@ export default function App() {
   const [fundingModalProject, setFundingModalProject] = useState<Project | null>(null);
   const [evidenceModalProject, setEvidenceModalProject] = useState<Project | null>(null);
   const [githubPRUrl, setGithubPRUrl] = useState<string | null>(null);
+  const [lastExportedGithub, setLastExportedGithub] = useState<ExportedGithubData | null>(() => {
+    try {
+      const saved = localStorage.getItem('openimpact_exported_github');
+      if (saved) return JSON.parse(saved);
+    } catch {
+      // ignore
+    }
+    return null;
+  });
+
+  const handleExportGithub = (data: ExportedGithubData) => {
+    setLastExportedGithub(data);
+    try {
+      localStorage.setItem('openimpact_exported_github', JSON.stringify(data));
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   const [showCommandPalette, setShowCommandPalette] = useState<boolean>(false);
   const handleOpenDocumentTenureInFiscal = () => {
     setActiveTab('fiscal');
@@ -407,78 +426,7 @@ export default function App() {
     currency: Currency;
     supporterName: string;
     timestamp: number;
-  } | null>({
-    id: 'live_init_1',
-    projectId: 'proj_tech_center',
-    projectTitle: 'Build a Community Technology Center',
-    amount: 50000,
-    currency: 'NGN',
-    supporterName: 'Chukka Foundation',
-    timestamp: Date.now(),
-  });
-
-  // REAL-TIME DYNAMIC INTERVAL SIMULATION FOR NETWORK METRICS
-  useEffect(() => {
-    if (!isLiveStreamActive) return;
-
-    const interval = setInterval(() => {
-      setProjects((prev) => {
-        if (prev.length === 0) return prev;
-        const randomIndex = Math.floor(Math.random() * prev.length);
-        const targetProj = prev[randomIndex];
-
-        // Alternating micro-updates: micro deposit, new backer, or verified PR proof
-        const randType = Math.random();
-
-        if (randType < 0.45) {
-          // Micro Deposit into Escrow Vault
-          const microAmount = targetProj.currency === 'USD' ? Math.floor(Math.random() * 200) + 50 : Math.floor(Math.random() * 50000) + 15000;
-          setLastPulsedStat('escrow');
-          setTimeout(() => setLastPulsedStat(null), 1200);
-
-          return prev.map((p, idx) =>
-            idx === randomIndex
-              ? { ...p, raised: p.raised + microAmount, supportersCount: p.supportersCount + 1 }
-              : p
-          );
-        } else if (randType < 0.8) {
-          // New Backer/Contributor join event
-          setLastPulsedStat('contributors');
-          setTimeout(() => setLastPulsedStat(null), 1200);
-
-          return prev.map((p, idx) =>
-            idx === randomIndex
-              ? { ...p, supportersCount: p.supportersCount + 1, contributorsCount: p.contributorsCount + (Math.random() > 0.5 ? 1 : 0) }
-              : p
-          );
-        } else {
-          // New 501(c)(6) Verified Evidence PR Proof
-          setLastPulsedStat('evidence');
-          setTimeout(() => setLastPulsedStat(null), 1200);
-
-          const newProofItem: Evidence = {
-            id: `ev_auto_${Date.now()}`,
-            projectId: targetProj.id,
-            title: `PR #${Math.floor(Math.random() * 200) + 50} Automated Audit Verification`,
-            type: 'Pull Request',
-            url: `https://github.com/open-impact/governance/pull/${Math.floor(Math.random() * 200) + 50}`,
-            submittedBy: '@peer_auditor_bot',
-            submittedAt: new Date().toISOString().split('T')[0],
-            status: 'Verified',
-            description: 'Automated CI/CD milestone test suite verification & consensus audit.',
-          };
-
-          return prev.map((p, idx) =>
-            idx === randomIndex
-              ? { ...p, evidence: [newProofItem, ...(p.evidence || [])] }
-              : p
-          );
-        }
-      });
-    }, 4500);
-
-    return () => clearInterval(interval);
-  }, [isLiveStreamActive]);
+  } | null>(null);
 
 
 
@@ -510,18 +458,22 @@ export default function App() {
       projectTitle: targetProj.title,
       amount: depositAmount,
       currency: targetProj.currency,
-      supporterName: `${currentUser.name} (Direct Escrow)`,
+      supporterName: `${currentUser?.name || 'Anonymous Contributor'} (Direct Escrow)`,
       timestamp: Date.now(),
     });
 
     // Dynamically increase current user impact score
-    setCurrentUser((prev) => ({
-      ...prev,
-      reputation: {
-        ...prev.reputation,
-        impactScore: prev.reputation.impactScore + 2,
-      },
-    }));
+    setCurrentUser((prev) =>
+      prev
+        ? {
+            ...prev,
+            reputation: {
+              ...prev.reputation,
+              impactScore: (prev.reputation?.impactScore || 0) + 2,
+            },
+          }
+        : null
+    );
   };
 
   // Document Viewer Modal State
@@ -568,7 +520,7 @@ export default function App() {
       title: evidenceData.title,
       type: evidenceData.type,
       url: evidenceData.url,
-      submittedBy: currentUser.handle,
+      submittedBy: currentUser?.handle || '@contributor',
       submittedAt: new Date().toISOString().split('T')[0],
       status: 'Pending',
       description: evidenceData.description,
@@ -588,7 +540,7 @@ export default function App() {
       title: ev.title,
       type: ev.type,
       url: ev.url,
-      submittedBy: currentUser.handle,
+      submittedBy: currentUser?.handle || '@contributor',
       submittedAt: new Date().toISOString().split('T')[0],
       status: 'Pending',
       description: ev.description,
@@ -607,7 +559,7 @@ export default function App() {
       title: evidenceData.title,
       type: evidenceData.type,
       url: evidenceData.url,
-      submittedBy: currentUser.handle,
+      submittedBy: currentUser?.handle || '@contributor',
       submittedAt: new Date().toISOString().split('T')[0],
       status: 'Pending',
       description: evidenceData.description,
@@ -626,7 +578,7 @@ export default function App() {
       title: ev.title,
       type: ev.type,
       url: ev.url,
-      submittedBy: currentUser.handle,
+      submittedBy: currentUser?.handle || '@contributor',
       submittedAt: new Date().toISOString().split('T')[0],
       status: 'Verified',
       description: ev.description,
@@ -636,14 +588,14 @@ export default function App() {
     if (selectedProject && selectedProject.id === projectId) {
       setSelectedProject(prev => prev ? { ...prev, evidence: [...newItems, ...prev.evidence] } : null);
     }
-    setCurrentUser(prev => ({
+    setCurrentUser(prev => prev ? ({
       ...prev,
       reputation: {
         ...prev.reputation,
-        verifiedContributionsCount: prev.reputation.verifiedContributionsCount + newItems.length,
-        impactScore: prev.reputation.impactScore + (newItems.length * 5),
+        verifiedContributionsCount: (prev.reputation?.verifiedContributionsCount || 0) + newItems.length,
+        impactScore: (prev.reputation?.impactScore || 0) + (newItems.length * 5),
       }
-    }));
+    }) : null);
   };
 
   const cards: CardType[] = [
@@ -1502,6 +1454,18 @@ export default function App() {
               onOpenDocumentTenure={handleOpenDocumentTenureInFiscal}
               onOpenProofVerification={() => {
                 setProofModalProject(selectedProject);
+                if (selectedProject?.githubRepo) {
+                  const cleanRepo = selectedProject.githubRepo.replace(/^https?:\/\/github\.com\//i, '').replace(/\.git$/i, '');
+                  handleExportGithub({
+                    repo: cleanRepo,
+                    contributorName: currentUser?.name || selectedProject.organization.name,
+                    contributorHandle: currentUser?.githubUsername
+                      ? `@${currentUser.githubUsername}`
+                      : `@${currentUser?.handle || 'contributor'}`,
+                    prTitle: selectedProject.title,
+                    prNumber: 'PR #1',
+                  });
+                }
                 setShowProofModal(true);
               }}
               onOpenAuthModal={() => setShowAuthModal(true)}
@@ -1530,6 +1494,7 @@ export default function App() {
               opportunities={opportunities}
               displayCurrency={selectedCurrency}
               searchQuery={searchQuery}
+              currentUser={currentUser}
               onApply={(opp) => {
                 setOpportunities((prev) =>
                   prev.map((o) =>
@@ -1601,7 +1566,16 @@ export default function App() {
               displayCurrency={selectedCurrency}
               projects={projects}
               userTenures={userTenures}
-              onOpenProofVerification={() => setShowProofModal(true)}
+              onOpenProofVerification={() => {
+                if (currentUser) {
+                  handleExportGithub({
+                    repo: currentUser.githubUsername ? `${currentUser.githubUsername}/openimpact-core` : 'openimpact/pay-bridge',
+                    contributorName: currentUser.name,
+                    contributorHandle: currentUser.githubUsername ? `@${currentUser.githubUsername}` : `@${currentUser.handle}`,
+                  });
+                }
+                setShowProofModal(true);
+              }}
               onOpenGithubPRIntegration={() => setShowGithubPRModal(true)}
               onOpenDocumentTenure={handleOpenDocumentTenureInFiscal}
               onSelectProject={(proj) => setSelectedProject(proj)}
@@ -1609,6 +1583,7 @@ export default function App() {
                 setAuthModalMode('login');
                 setShowAuthModal(true);
               }}
+              onUpdateCurrentUser={(updated) => setCurrentUser(updated)}
             />
           </div>
         )}
@@ -1657,6 +1632,7 @@ export default function App() {
         projects={projects}
         currentUser={currentUser}
         initialProject={proofModalProject}
+        exportedGithub={lastExportedGithub}
       />
 
       <DocumentViewerModal
@@ -1705,16 +1681,16 @@ export default function App() {
               projectTitle: fundingModalProject.title,
               amount,
               currency: selectedCurrency,
-              supporterName: `${currentUser.name} (Direct Escrow)`,
+              supporterName: `${currentUser?.name || 'Direct Supporter'} (Direct Escrow)`,
               timestamp: Date.now(),
             });
-            setCurrentUser(prev => ({
+            setCurrentUser(prev => prev ? ({
               ...prev,
               reputation: {
                 ...prev.reputation,
-                impactScore: prev.reputation.impactScore + 3,
+                impactScore: (prev.reputation?.impactScore || 0) + 3,
               }
-            }));
+            }) : null);
             setFundingModalProject(null);
           }}
         />
@@ -1736,7 +1712,11 @@ export default function App() {
           isOpen={!!githubPRUrl}
           onClose={() => setGithubPRUrl(null)}
           prUrl={githubPRUrl}
-          onOpenProofVerification={() => setShowProofModal(true)}
+          currentUser={currentUser}
+          onOpenProofVerification={(exported) => {
+            if (exported) handleExportGithub(exported);
+            setShowProofModal(true);
+          }}
         />
       )}
 
@@ -1763,6 +1743,13 @@ export default function App() {
           <div className="w-full max-w-2xl my-auto">
             <GithubPRIntegration
               projects={projects}
+              currentUser={currentUser}
+              onExportGithub={handleExportGithub}
+              onOpenProofVerification={(exported) => {
+                if (exported) handleExportGithub(exported);
+                setShowGithubPRModal(false);
+                setShowProofModal(true);
+              }}
               onAddEvidence={(projId, ev) => {
                 handleSubmitEvidenceForProject(projId, ev);
                 setShowGithubPRModal(false);

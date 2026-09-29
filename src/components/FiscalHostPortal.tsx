@@ -867,12 +867,12 @@ export const FiscalHostPortal: React.FC<FiscalHostPortalProps> = ({
 
       {/* MODAL 1: DONATE / SPONSOR COLLECTIVE */}
       {selectedCollectiveForDonation && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl relative text-left">
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+          <div className="bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl relative text-left max-h-[calc(100dvh-2rem)] overflow-y-auto my-auto">
             <button
               type="button"
               onClick={() => setSelectedCollectiveForDonation(null)}
-              className="absolute right-4 top-4 text-slate-400 hover:text-slate-700 p-1.5 rounded-full hover:bg-slate-100 cursor-pointer"
+              className="absolute right-4 top-4 text-slate-400 hover:text-slate-700 p-1.5 rounded-full hover:bg-slate-100 cursor-pointer z-10"
             >
               <X className="h-5 w-5" />
             </button>
@@ -1037,12 +1037,12 @@ export const FiscalHostPortal: React.FC<FiscalHostPortalProps> = ({
 
       {/* MODAL 2: REQUEST FUNDS / CREATE COLLECTIVE */}
       {showCreateModal && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl relative max-h-[90vh] overflow-y-auto text-left">
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+          <div className="bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl relative max-h-[calc(100dvh-2rem)] overflow-y-auto text-left my-auto">
             <button
               type="button"
               onClick={() => setShowCreateModal(false)}
-              className="absolute right-4 top-4 text-slate-400 hover:text-slate-700 p-1.5 rounded-full hover:bg-slate-100 cursor-pointer"
+              className="absolute right-4 top-4 text-slate-400 hover:text-slate-700 p-1.5 rounded-full hover:bg-slate-100 cursor-pointer z-10"
             >
               <X className="h-5 w-5" />
             </button>
@@ -1198,12 +1198,12 @@ export const FiscalHostPortal: React.FC<FiscalHostPortalProps> = ({
 
       {/* MODAL 3: SUBMIT EXPENSE CLAIM */}
       {showExpenseModal && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl relative text-left">
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+          <div className="bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl relative max-h-[calc(100dvh-2rem)] overflow-y-auto text-left my-auto">
             <button
               type="button"
               onClick={() => setShowExpenseModal(false)}
-              className="absolute right-4 top-4 text-slate-400 hover:text-slate-700 p-1.5 rounded-full hover:bg-slate-100 cursor-pointer"
+              className="absolute right-4 top-4 text-slate-400 hover:text-slate-700 p-1.5 rounded-full hover:bg-slate-100 cursor-pointer z-10"
             >
               <X className="h-5 w-5" />
             </button>
