@@ -413,7 +413,7 @@ export default function App() {
     projectTitle: 'Build a Community Technology Center',
     amount: 50000,
     currency: 'NGN',
-    supporterName: 'Chuka Foundation',
+    supporterName: 'Chukka Foundation',
     timestamp: Date.now(),
   });
 
