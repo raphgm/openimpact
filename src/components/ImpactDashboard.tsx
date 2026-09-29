@@ -367,48 +367,66 @@ export const ImpactDashboard: React.FC<ImpactDashboardProps> = ({
           </div>
         </div>
 
-        <div className="w-full h-72 bg-slate-50/50 rounded-2xl p-4 border border-slate-100">
+        <div className="w-full h-80 bg-gradient-to-br from-white via-[#FAF7F2] to-[#F4EFE6] rounded-3xl p-5 border border-[#E8E2D6] shadow-sm relative overflow-hidden">
           <ResponsiveContainer width="100%" height="100%">
             {activeTab === 'timeline' ? (
               <BarChart
                 data={timelineData}
-                margin={{ top: 12, right: 16, left: -10, bottom: 8 }}
+                margin={{ top: 16, right: 16, left: -10, bottom: 8 }}
               >
-                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
+                <defs>
+                  <linearGradient id="primaryBarGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#6366F1" />
+                    <stop offset="100%" stopColor="#0B1E48" />
+                  </linearGradient>
+                  <linearGradient id="secondaryBarGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#10B981" />
+                    <stop offset="100%" stopColor="#047857" />
+                  </linearGradient>
+                  <linearGradient id="accentBarGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#8B5CF6" />
+                    <stop offset="100%" stopColor="#4338CA" />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="#E5DFD5" vertical={false} opacity={0.8} />
                 <XAxis
                   dataKey="period"
-                  stroke="#64748b"
+                  stroke="#78716c"
                   fontSize={11}
                   tickLine={false}
-                  axisLine={{ stroke: '#cbd5e1' }}
+                  axisLine={{ stroke: '#D6CDC2' }}
+                  dy={4}
                 />
                 <YAxis
-                  stroke="#64748b"
+                  stroke="#78716c"
                   fontSize={11}
                   tickLine={false}
-                  axisLine={{ stroke: '#cbd5e1' }}
+                  axisLine={{ stroke: '#D6CDC2' }}
+                  dx={-4}
                 />
                 <Tooltip
-                  cursor={{ fill: 'rgba(241, 245, 249, 0.7)' }}
+                  cursor={{ fill: 'rgba(99, 102, 241, 0.06)' }}
                   content={({ active, payload, label }) => {
                     if (active && payload && payload.length) {
                       return (
-                        <div className="bg-white p-3 rounded-xl border border-slate-200 shadow-xl text-xs space-y-1.5">
-                          <div className="font-bold text-slate-900 border-b border-slate-100 pb-1">
-                            {label} 2026 Audit Period
+                        <div className="bg-slate-900 text-white p-3.5 rounded-2xl border border-slate-800 shadow-2xl text-xs space-y-2 backdrop-blur-md">
+                          <div className="font-extrabold text-slate-100 border-b border-slate-800 pb-1.5 flex items-center justify-between">
+                            <span>{label} 2026 Audit Period</span>
+                            <span className="text-[10px] font-mono bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded-full font-bold">SHA-256</span>
                           </div>
-                          <div className="flex items-center justify-between space-x-4 text-indigo-700 font-medium">
-                            <span>Impact Points:</span>
-                            <span className="font-mono font-bold">+{payload[0]?.value} pts</span>
+                          <div className="flex items-center justify-between space-x-6 text-indigo-300 font-medium">
+                            <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-indigo-400"></span>Impact Points:</span>
+                            <span className="font-mono font-bold text-white">+{payload[0]?.value} pts</span>
                           </div>
                           {payload[1] && (
-                            <div className="flex items-center justify-between space-x-4 text-emerald-700 font-medium">
-                              <span>Verified Events:</span>
-                              <span className="font-mono font-bold">{payload[1]?.value} proofs</span>
+                            <div className="flex items-center justify-between space-x-6 text-emerald-300 font-medium">
+                              <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-emerald-400"></span>Cumulative Trajectory:</span>
+                              <span className="font-mono font-bold text-white">{payload[1]?.value} pts</span>
                             </div>
                           )}
-                          <div className="text-[10px] text-slate-400 pt-0.5">
-                            SHA-256 Verified on IPFS / GitHub
+                          <div className="text-[10px] text-slate-400 pt-1 border-t border-slate-800 flex items-center gap-1">
+                            <ShieldCheck className="h-3 w-3 text-emerald-400 shrink-0" />
+                            <span>Verified Immutable Ledger Record</span>
                           </div>
                         </div>
                       );
@@ -421,23 +439,23 @@ export const ImpactDashboard: React.FC<ImpactDashboardProps> = ({
                   align="right"
                   iconType="circle"
                   iconSize={8}
-                  wrapperStyle={{ fontSize: '11px', paddingBottom: '8px' }}
+                  wrapperStyle={{ fontSize: '11px', paddingBottom: '12px', fontWeight: 600, color: '#44403C' }}
                 />
                 {metricMode === 'points' ? (
                   <>
                     <Bar
                       dataKey="impactPoints"
                       name="Impact Points Earned"
-                      fill="#0B1E48"
-                      radius={[6, 6, 0, 0]}
-                      maxBarSize={48}
+                      fill="url(#primaryBarGrad)"
+                      radius={[8, 8, 0, 0]}
+                      maxBarSize={40}
                     />
                     <Bar
                       dataKey="cumulative"
                       name="Cumulative Trajectory"
-                      fill="#4F46E5"
-                      radius={[6, 6, 0, 0]}
-                      maxBarSize={48}
+                      fill="url(#accentBarGrad)"
+                      radius={[8, 8, 0, 0]}
+                      maxBarSize={40}
                     />
                   </>
                 ) : (
@@ -445,16 +463,16 @@ export const ImpactDashboard: React.FC<ImpactDashboardProps> = ({
                     <Bar
                       dataKey="contributions"
                       name="Total Contributions"
-                      fill="#0B1E48"
-                      radius={[6, 6, 0, 0]}
-                      maxBarSize={48}
+                      fill="url(#primaryBarGrad)"
+                      radius={[8, 8, 0, 0]}
+                      maxBarSize={40}
                     />
                     <Bar
                       dataKey="verifiedProofs"
                       name="Cryptographic Proofs"
-                      fill="#10B981"
-                      radius={[6, 6, 0, 0]}
-                      maxBarSize={48}
+                      fill="url(#secondaryBarGrad)"
+                      radius={[8, 8, 0, 0]}
+                      maxBarSize={40}
                     />
                   </>
                 )}

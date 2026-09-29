@@ -16,7 +16,7 @@ export const INITIAL_USER: UserProfile = {
   name: "Julian O'Connor",
   handle: '@julian_dev',
   email: 'julian@openimpact.network',
-  avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=250',
+  avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80',
   role: 'contributor',
   location: 'Toronto, Ontario, Canada',
   bio: 'Systems Architect & Open Source Contributor. Passionate about verifiable digital public goods and transparency.',
@@ -48,7 +48,7 @@ const RAW_INITIAL_PROJECTS: Project[] = [
     organization: {
       id: 'org_vancouver_tech',
       name: 'Vancouver Tech Initiative',
-      logo: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=120',
+      logo: 'https://images.unsplash.com/photo-1618401471353-b98aedd04e11?w=150&auto=format&fit=crop&q=80',
       verified: true,
       description: 'Grassroots NGO building community tech infrastructure across British Columbia.',
       location: 'Vancouver, Canada',
@@ -173,7 +173,7 @@ const RAW_INITIAL_PROJECTS: Project[] = [
         projectId: 'proj_tech_center',
         title: 'Photo Verification: 75 Mini PCs Unboxed and Installed',
         type: 'Photo / Media',
-        url: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=600',
+        url: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800&q=80',
         submittedBy: "Julian O'Connor",
         submittedAt: '2026-05-18',
         verifiedAt: '2026-05-19',
@@ -216,7 +216,7 @@ const RAW_INITIAL_PROJECTS: Project[] = [
     organization: {
       id: 'org_dev_global',
       name: 'DevGlobal Foundation',
-      logo: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&q=80&w=120',
+      logo: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=150&auto=format&fit=crop&q=80',
       verified: true,
       description: 'Supporting public software goods and decentralized financial transparency tooling globally.',
       location: 'Geneva, Switzerland',
@@ -329,7 +329,7 @@ const RAW_INITIAL_PROJECTS: Project[] = [
     organization: {
       id: 'org_kenya_water',
       name: 'Clean Water East Africa',
-      logo: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&q=80&w=120',
+      logo: 'https://images.unsplash.com/photo-1541888946425-d0fbb18fefbc?w=150&auto=format&fit=crop&q=80',
       verified: true,
       description: 'Sustainable water & solar energy infrastructure deployment across Kenya & Uganda.',
       location: 'Nairobi, Kenya',
@@ -398,7 +398,7 @@ const RAW_INITIAL_PROJECTS: Project[] = [
         projectId: 'proj_solar_pumps',
         title: 'Clean Water Flow Test Video & Meter Reading',
         type: 'Photo / Media',
-        url: 'https://images.unsplash.com/photo-1541888946425-d0fbb186a5b3?auto=format&fit=crop&q=80&w=600',
+        url: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80',
         submittedBy: 'Clean Water East Africa Field Team',
         submittedAt: '2026-05-16',
         verifiedAt: '2026-05-17',
@@ -545,7 +545,7 @@ export const INITIAL_OPPORTUNITIES: Opportunity[] = filterSpamOpportunities([
     githubIssue: 'https://github.com/tiangolo/fastapi/issues',
     applicantsCount: 9,
     assignedTo: "Julian O'Connor",
-    assignedToAvatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120',
+    assignedToAvatar: '/skillschlogo.svg',
   },
   {
     id: 'opp_4',
@@ -1113,7 +1113,7 @@ export const INITIAL_COLLECTIVES = [
     name: 'Global FinOps SDK & Payroll Infrastructure',
     slug: 'global-finops-sdk',
     category: 'Open Source Software' as const,
-    logo: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&q=80&w=120',
+    logo: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=150&auto=format&fit=crop&q=80',
     tagline: 'Audit-ready global tax calculation engine & API public good for modern engineering teams.',
     description: 'A non-profit open source collective bringing legal clarity and automated computation software to developers, startups, and FinOps builders worldwide.',
     githubRepo: 'https://github.com/tiangolo/fastapi',
@@ -1127,8 +1127,8 @@ export const INITIAL_COLLECTIVES = [
     sponsorsCount: 8,
     isSample: true,
     maintainers: [
-      { name: "Julian O'Connor", avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120', role: 'Lead Maintainer' },
-      { name: 'Amina Bello', avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=120', role: 'Core Contributor' },
+      { name: "Julian O'Connor", avatar: '/skillschlogo.svg', role: 'Lead Maintainer' },
+      { name: 'Amina Bello', avatar: '/skillschlogo.svg', role: 'Core Contributor' },
     ],
     sponsorTiers: [
       {

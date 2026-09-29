@@ -341,7 +341,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
             {currentUser.bio}
           </p>
 
-          <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-2">
+          <div className="flex flex-row items-center justify-start gap-3 pt-2 flex-nowrap overflow-x-auto w-full max-w-full pb-1">
             {!currentUser.githubVerified ? (
               <button
                 type="button"
@@ -1152,7 +1152,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
                     >
                       <div className="flex items-center space-x-3.5 min-w-0">
                         <img
-                          src={u.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150'}
+                          src={u.avatar || '/unicef_icon.svg'}
                           alt={u.name}
                           className="w-10 h-10 rounded-2xl object-cover border border-slate-100 shrink-0"
                         />

@@ -52,7 +52,7 @@ export const SponsorEventModal: React.FC<SponsorEventModalProps> = ({
       organizer: 'Global Open Source Guild',
       defaultAmountNGN: 25000000,
       defaultAmountUSD: 25000,
-      image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&auto=format&fit=crop&q=80',
+      image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80',
     },
     {
       id: 'event-nairobi-hackathon',
@@ -63,7 +63,7 @@ export const SponsorEventModal: React.FC<SponsorEventModalProps> = ({
       organizer: 'Silicon Lake Collective',
       defaultAmountNGN: 10000000,
       defaultAmountUSD: 10000,
-      image: 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=600&auto=format&fit=crop&q=80',
+      image: 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&w=800&q=80',
     },
     {
       id: 'event-accra-devcon',
@@ -74,7 +74,7 @@ export const SponsorEventModal: React.FC<SponsorEventModalProps> = ({
       organizer: 'Ghana Tech Lab',
       defaultAmountNGN: 15000000,
       defaultAmountUSD: 15000,
-      image: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=600&auto=format&fit=crop&q=80',
+      image: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=800&q=80',
     },
   ]);
 
@@ -233,7 +233,7 @@ export const SponsorEventModal: React.FC<SponsorEventModalProps> = ({
         organizer: newEventOrganizer,
         defaultAmountNGN: 15000000,
         defaultAmountUSD: 15000,
-        image: 'https://images.unsplash.com/photo-1511578314322-379afb476865?w=600&auto=format&fit=crop&q=80',
+        image: '/unicef_innovation.svg',
       };
       setEvents([created, ...events]);
       setSelectedEventId(created.id);

@@ -39,7 +39,7 @@ export const GrantApplicationModal: React.FC<GrantApplicationModalProps> = ({
   const [category, setCategory] = useState('Open Source Software & Public Goods');
   const [requestedAmount, setRequestedAmount] = useState<number>(25000);
   const [currency, setCurrency] = useState<Currency>('USD');
-  const [githubRepo, setGithubRepo] = useState('https://github.com/openimpact/initiative-repo');
+  const [githubRepo, setGithubRepo] = useState('');
   const [description, setDescription] = useState('');
   
   const [milestones, setMilestones] = useState<
@@ -181,7 +181,7 @@ export const GrantApplicationModal: React.FC<GrantApplicationModalProps> = ({
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-indigo-600 font-bold">2.</span>
-                  <span><strong>Peer Review & Scoring:</strong> Open Impact peer review panel evaluates technical feasibility and impact.</span>
+                  <span><strong>Peer Review & Scoring:</strong> {currentSelectedGrant?.organization.name || 'Foundation'} review panel evaluates technical feasibility and impact.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-purple-600 font-bold">3.</span>
@@ -326,7 +326,7 @@ export const GrantApplicationModal: React.FC<GrantApplicationModalProps> = ({
                 className="w-full bg-slate-50 text-slate-900 text-xs px-3 py-2 rounded-xl border border-slate-200 focus:outline-none font-mono focus:ring-2 focus:ring-emerald-500"
               />
               <p className="text-[10px] text-slate-500 mt-1">
-                Open Impact monitors merged PRs, releases, and documentation commits to automatically verify milestone deliverables.
+                {currentSelectedGrant?.organization.name || 'Foundation'} verification systems monitor merged PRs, releases, and documentation commits to automatically verify milestone deliverables.
               </p>
             </div>
 
@@ -457,7 +457,7 @@ export const GrantApplicationModal: React.FC<GrantApplicationModalProps> = ({
                 type="submit"
                 className="w-full py-3.5 bg-[#111827] hover:bg-slate-800 text-white font-bold text-xs rounded-xl transition shadow-md cursor-pointer flex items-center justify-center space-x-2"
               >
-                <span>Submit Proposal to Open Collect Grant Committee</span>
+                <span>Submit Proposal to {currentSelectedGrant?.organization.name || 'Grant Foundation'}</span>
                 <ArrowRight className="h-4 w-4" />
               </button>
             </div>

@@ -57,9 +57,9 @@ export const MilestoneEscrowStudio: React.FC<MilestoneEscrowStudioProps> = ({
       ],
       requiredSignatures: 3,
       signatures: [
-        { name: 'Dr. Maya Lin', role: 'Security Auditor (501c6)', avatar: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&q=80&w=200', signedAt: '2 days ago', verified: true },
-        { name: 'Kareem Adeyemi', role: 'Sponsor Delegate (Public Goods Council)', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200', signedAt: '2 days ago', verified: true },
-        { name: 'Alexander Wright', role: 'Lead Fiscal Host Officer', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200', signedAt: '1 day ago', verified: true },
+        { name: 'Dr. Maya Lin', role: 'Security Auditor (501c6)', avatar: '/unicef_icon.svg', signedAt: '2 days ago', verified: true },
+        { name: 'Kareem Adeyemi', role: 'Sponsor Delegate (Public Goods Council)', avatar: '/unicef_icon.svg', signedAt: '2 days ago', verified: true },
+        { name: 'Alexander Wright', role: 'Lead Fiscal Host Officer', avatar: '/unicef_icon.svg', signedAt: '1 day ago', verified: true },
       ],
       deliverablesHash: '0x8f3a92b4c7e1d5a6b0c2e4f8a1d3b5c7e9f2a4b6',
       releasedAt: 'Yesterday at 14:32 UTC',
@@ -80,8 +80,8 @@ export const MilestoneEscrowStudio: React.FC<MilestoneEscrowStudioProps> = ({
       ],
       requiredSignatures: 3,
       signatures: [
-        { name: 'Dr. Maya Lin', role: 'Security Auditor (501c6)', avatar: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&q=80&w=200', signedAt: '3 hours ago', verified: true },
-        { name: 'Kareem Adeyemi', role: 'Sponsor Delegate (Public Goods Council)', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200', signedAt: '1 hour ago', verified: true },
+        { name: 'Dr. Maya Lin', role: 'Security Auditor (501c6)', avatar: '/unicef_icon.svg', signedAt: '3 hours ago', verified: true },
+        { name: 'Kareem Adeyemi', role: 'Sponsor Delegate (Public Goods Council)', avatar: '/unicef_icon.svg', signedAt: '1 hour ago', verified: true },
       ],
       deliverablesHash: '0x3c9e12a4b8f109c4d28e71fa091b34c8901ef23a',
     },
@@ -132,7 +132,7 @@ export const MilestoneEscrowStudio: React.FC<MilestoneEscrowStudioProps> = ({
       const newSignature = {
         name: 'You (Invited Signer)',
         role: 'Authorized Attestor',
-        avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120',
+        avatar: '/skillschlogo.svg',
         signedAt: 'Just now',
         verified: true,
       };

@@ -49,7 +49,7 @@ export const GithubPRModal: React.FC<GithubPRModalProps> = ({
     {
       id: 'c1',
       user: 'sarahchen-dev',
-      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150',
+      avatar: '/unicef_icon.svg',
       role: 'Lead Maintainer',
       text: 'Submitted PR for Milestone #2 delivery: Implemented the non-profit fiat-to-crypto payout bridge for OpenImpact Escrow. Includes smart contract router, zero-fee gas optimization, and automated audit webhook triggers. Ready for peer review!',
       time: '2 hours ago',
@@ -57,7 +57,7 @@ export const GithubPRModal: React.FC<GithubPRModalProps> = ({
     {
       id: 'c2',
       user: 'openproof-bot',
-      avatar: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=150',
+      avatar: '/unicef_icon.svg',
       role: 'Bot / Automated Auditor',
       text: '🤖 **OpenProof Escrow Verification Status**: All 4 automated integration tests passed. Zero-knowledge proof verified against vault #0x9a83...412. Required signatures: 3/3 collected.',
       time: '1 hour ago',
@@ -66,7 +66,7 @@ export const GithubPRModal: React.FC<GithubPRModalProps> = ({
     {
       id: 'c3',
       user: 'tunde-bakare',
-      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150',
+      avatar: '/unicef_icon.svg',
       role: 'Community Auditor',
       text: 'Reviewed the smart contract payout router and test suite. Gas optimizations look great, and all milestone deliverables match the specs. Approved! LGTM 🚀',
       time: '45 mins ago',
@@ -89,7 +89,7 @@ export const GithubPRModal: React.FC<GithubPRModalProps> = ({
       {
         id: `c_${Date.now()}`,
         user: 'you (OpenImpact Contributor)',
-        avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150',
+        avatar: '/unicef_icon.svg',
         role: 'Verified Reviewer',
         text: commentText,
         time: 'Just now',

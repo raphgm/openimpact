@@ -21,6 +21,7 @@ import {
 } from 'firebase/firestore';
 import firebaseConfigJson from '../../firebase-applet-config.json';
 import { UserProfile, UserRole } from '../types';
+import { getRepoAvatar } from '../utils/repoImages';
 
 const firebaseConfig = {
   apiKey: firebaseConfigJson.apiKey,
@@ -137,7 +138,7 @@ export function buildDefaultUserProfile(
     name: displayName,
     handle: cleanHandle,
     email: user.email || '',
-    avatar: user.photoURL || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150',
+    avatar: user.photoURL || getRepoAvatar(),
     role,
     bio: orgDetails ? `Member of ${orgDetails}` : 'OpenImpact Community Contributor',
     location: 'Global',
@@ -231,14 +232,14 @@ export async function bindGitHubAccount(
         name: githubData?.name || cleanUsername,
         handle: `@${cleanUsername.toLowerCase()}`,
         email: auth.currentUser?.email || '',
-        avatar: githubData?.avatar_url || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150',
+        avatar: githubData?.avatar_url || getRepoAvatar(),
         role: 'contributor',
         location: githubData?.location || 'Global',
         bio: githubData?.bio || 'Verified OpenImpact Contributor',
         skills: ['Open Source', 'GitHub Developer'],
       }),
       handle: `@${cleanUsername.toLowerCase()}`,
-      avatar: githubData?.avatar_url || currentProfile?.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150',
+      avatar: githubData?.avatar_url || currentProfile?.avatar || getRepoAvatar(),
       githubUsername: githubData?.login || cleanUsername,
       githubVerified: true,
       githubBoundAt: new Date().toISOString().split('T')[0],

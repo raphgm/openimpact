@@ -106,7 +106,7 @@ export const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
       organization: {
         id: 'org_user',
         name: 'OpenImpact Community Lead',
-        logo: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=120',
+        logo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
         verified: true,
         description: 'Verified OpenImpact Creator',
         location,

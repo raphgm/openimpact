@@ -108,6 +108,7 @@ export interface ExportedGithubData {
   repo: string;
   contributorName?: string;
   contributorHandle?: string;
+  authorHandle?: string;
   prTitle?: string;
   prUrl?: string;
   prNumber?: string;

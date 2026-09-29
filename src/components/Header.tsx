@@ -65,9 +65,9 @@ export const Header: React.FC<HeaderProps> = ({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-4">
         {/* Brand logo & Tagline */}
         <div className="flex items-center space-x-3 cursor-pointer shrink-0" onClick={() => setActiveTab('home')}>
-          <div className="relative w-10 h-10 flex items-center justify-center">
-            <div className="absolute w-6 h-8 bg-[#8B5CF6] rounded-full transform -rotate-[30deg] translate-x-1 shadow-sm"></div>
-            <div className="absolute w-6 h-8 bg-[#10B981] rounded-full transform -rotate-[30deg] -translate-x-1 opacity-90 shadow-sm"></div>
+          <div className="logo-mark relative w-10 h-10">
+            <span className="logo-shape logo-blue absolute w-[22px] h-[36px] rounded-[14px_14px_14px_3px] rotate-[-28deg] left-[15px] top-[1px] bg-gradient-to-br from-indigo-600 to-purple-600" />
+            <span className="logo-shape logo-green absolute w-[22px] h-[36px] rounded-[14px_14px_14px_3px] rotate-[-28deg] left-[4px] top-[3px] bg-gradient-to-br from-emerald-500 to-teal-500 opacity-95" />
           </div>
           <div>
             <span className="font-black text-xl tracking-tight text-slate-900 block leading-tight">Open Impact</span>

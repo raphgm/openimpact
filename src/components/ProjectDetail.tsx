@@ -5,6 +5,7 @@ import { doc, setDoc } from 'firebase/firestore';
 import { formatCurrency, calculateProgress } from '../utils/formatters';
 import { evaluateProjectBadges, getBadgeLevelBadgeStyle } from '../utils/badgeEngine';
 import { ImpactBadgeModal } from './ImpactBadgeModal';
+import { sanitizeImageUrl } from '../utils/repoImages';
 import { MilestoneEscrowStudio } from './MilestoneEscrowStudio';
 import { TransparentLedgerExplorer } from './TransparentLedgerExplorer';
 import { GlobalSettlementModal } from './GlobalSettlementModal';
@@ -1300,9 +1301,9 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({
                 <h4 className="font-bold text-sm text-slate-900">{ev.title}</h4>
                 <p className="text-xs text-slate-600 leading-relaxed">{ev.description}</p>
 
-                {ev.url.startsWith('http') && (ev.url.includes('.jpg') || ev.url.includes('.png') || ev.url.includes('unsplash')) && (
+                {ev.url && (
                   <img
-                    src={ev.url}
+                    src={sanitizeImageUrl(ev.url)}
                     alt={ev.title}
                     className="w-full h-40 object-cover rounded-lg border border-slate-200"
                   />

@@ -545,10 +545,12 @@ export const DocumentViewerModal: React.FC<DocumentViewerModalProps> = ({
                 <div id="verified-certificate" className="bg-white text-slate-900 p-6 sm:p-10 rounded-xl border-2 border-slate-200 shadow-xl relative overflow-hidden font-sans transition">
                   
                   {/* Official Stamp Watermark */}
-                  <div className="absolute bottom-6 right-6 border-4 border-emerald-600/20 rounded-full p-4 transform -rotate-12 pointer-events-none text-emerald-700/60 text-center font-mono text-[10px] uppercase font-bold tracking-wider z-0">
-                    <div className="text-xs font-extrabold">{stamp1 || 'VERIFIED PROOF'}</div>
-                    <div>{stamp2 || 'OPENIMPACT REGISTRY'}</div>
-                    <div>{stamp3 || '2026 AUDITED'}</div>
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
+                    <div className="border-4 border-emerald-600/15 rounded-full p-8 transform -rotate-12 text-emerald-700/30 text-center font-mono text-xs uppercase font-extrabold tracking-widest scale-150">
+                      <div>{stamp1 || 'VERIFIED PROOF'}</div>
+                      <div>{stamp2 || 'OPENIMPACT REGISTRY'}</div>
+                      <div>{stamp3 || '2026 AUDITED'}</div>
+                    </div>
                   </div>
 
                   {/* Certified Immutable Seal Top Banner */}

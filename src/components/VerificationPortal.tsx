@@ -32,7 +32,10 @@ import {
   History,
   TrendingUp,
   Lock,
-  Unlock
+  Unlock,
+  Sparkles,
+  Github,
+  QrCode
 } from 'lucide-react';
 
 enum OperationType {
@@ -90,8 +93,18 @@ export interface VerificationRequest {
 interface VerificationPortalProps {
   projects: Project[];
   currentUser: UserProfile | null;
-  onOpenProofVerification?: () => void;
+  onOpenProofVerification?: (exportedData?: {
+    repo?: string;
+    authorName?: string;
+    authorHandle?: string;
+    prTitle?: string;
+    prNumber?: number;
+    linesAdded?: number;
+    linesDeleted?: number;
+    state?: string;
+  }) => void;
   onOpenDocumentViewer?: (url?: string, title?: string) => void;
+  onOpenAuthModal?: () => void;
   onViewLedger?: () => void;
 }
 
@@ -173,10 +186,11 @@ export const VerificationPortal: React.FC<VerificationPortalProps> = ({
   currentUser,
   onOpenProofVerification, 
   onOpenDocumentViewer, 
+  onOpenAuthModal,
   onViewLedger 
 }) => {
-  // Dual-mode View: 'audits' (Verification Portal Workflow) or 'registry' (Vetted Evidence Registry)
-  const [activePortalTab, setActivePortalTab] = useState<'audits' | 'registry'>('audits');
+  // Tri-mode View: 'audits' (Verification Portal Workflow), 'registry' (Vetted Evidence Registry), or 'generator' (Proof of Contribution Certificate Studio)
+  const [activePortalTab, setActivePortalTab] = useState<'audits' | 'registry' | 'generator'>('audits');
   
   // Real-time Requests from Firestore
   const [requests, setRequests] = useState<VerificationRequest[]>([]);
@@ -188,6 +202,7 @@ export const VerificationPortal: React.FC<VerificationPortalProps> = ({
   const [sourceFilter, setSourceFilter] = useState<string>('All');
   const [evidenceTypeFilter, setEvidenceTypeFilter] = useState<string>('All');
   const [projectStatusFilter, setProjectStatusFilter] = useState<string>('All');
+  const [deliverableScope, setDeliverableScope] = useState<'all' | 'mine'>('all');
 
   // Multi-step Audit workflow modal state
   const [activeAuditRequest, setActiveAuditRequest] = useState<VerificationRequest | null>(null);
@@ -523,34 +538,64 @@ export const VerificationPortal: React.FC<VerificationPortalProps> = ({
 
       {/* 2. Toggle Navigation Tabs for workspace */}
       <section className="max-w-7xl mx-auto">
-        <div className="flex border-b border-slate-200">
-          <button
-            onClick={() => setActivePortalTab('audits')}
-            className={`py-4 px-6 font-bold text-sm tracking-tight border-b-2 transition flex items-center space-x-2 cursor-pointer ${
-              activePortalTab === 'audits'
-                ? 'border-indigo-600 text-indigo-600'
-                : 'border-transparent text-slate-500 hover:text-slate-800'
-            }`}
-          >
-            <Sliders className="h-4 w-4" />
-            <span>Auditor Workbench ({filteredRequests.length})</span>
-            {pendingRequestsCount > 0 && (
-              <span className="bg-red-500 text-white text-[10px] px-2 py-0.5 rounded-full ml-1.5 animate-pulse font-mono font-bold">
-                {pendingRequestsCount}
+        <div className="flex flex-wrap items-center justify-between border-b border-slate-200">
+          <div className="flex flex-wrap items-center">
+            <button
+              onClick={() => setActivePortalTab('audits')}
+              className={`py-4 px-6 font-bold text-sm tracking-tight border-b-2 transition flex items-center space-x-2 cursor-pointer ${
+                activePortalTab === 'audits'
+                  ? 'border-indigo-600 text-indigo-600'
+                  : 'border-transparent text-slate-500 hover:text-slate-800'
+              }`}
+            >
+              <Sliders className="h-4 w-4" />
+              <span>Auditor Workbench ({filteredRequests.length})</span>
+              {pendingRequestsCount > 0 && (
+                <span className="bg-red-500 text-white text-[10px] px-2 py-0.5 rounded-full ml-1.5 animate-pulse font-mono font-bold">
+                  {pendingRequestsCount}
+                </span>
+              )}
+            </button>
+            <button
+              onClick={() => setActivePortalTab('registry')}
+              className={`py-4 px-6 font-bold text-sm tracking-tight border-b-2 transition flex items-center space-x-2 cursor-pointer ${
+                activePortalTab === 'registry'
+                  ? 'border-indigo-600 text-indigo-600'
+                  : 'border-transparent text-slate-500 hover:text-slate-800'
+              }`}
+            >
+              <Fingerprint className="h-4 w-4" />
+              <span>Verified Proofs Registry ({filteredVettedEvidence.length})</span>
+            </button>
+            <button
+              onClick={() => setActivePortalTab('generator')}
+              className={`py-4 px-6 font-bold text-sm tracking-tight border-b-2 transition flex items-center space-x-2 cursor-pointer ${
+                activePortalTab === 'generator'
+                  ? 'border-emerald-600 text-emerald-700 bg-emerald-50/40'
+                  : 'border-transparent text-slate-500 hover:text-slate-800'
+              }`}
+            >
+              <ShieldCheck className="h-4 w-4 text-emerald-600" />
+              <span>Proof Generator</span>
+              <span className="bg-emerald-100 text-emerald-800 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider ml-1">
+                Studio
               </span>
+            </button>
+          </div>
+
+          <div className="py-2.5 pr-2 hidden sm:flex items-center space-x-2">
+            {onOpenProofVerification && (
+              <button
+                type="button"
+                onClick={() => onOpenProofVerification()}
+                className="flex items-center space-x-1.5 px-3.5 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-xs rounded-xl shadow-xs transition cursor-pointer"
+                title="Launch Official Proof Certificate Generator Studio"
+              >
+                <ShieldCheck className="h-4 w-4" />
+                <span>Generate Certificate</span>
+              </button>
             )}
-          </button>
-          <button
-            onClick={() => setActivePortalTab('registry')}
-            className={`py-4 px-6 font-bold text-sm tracking-tight border-b-2 transition flex items-center space-x-2 cursor-pointer ${
-              activePortalTab === 'registry'
-                ? 'border-indigo-600 text-indigo-600'
-                : 'border-transparent text-slate-500 hover:text-slate-800'
-            }`}
-          >
-            <Fingerprint className="h-4 w-4" />
-            <span>Verified Proofs Registry ({filteredVettedEvidence.length})</span>
-          </button>
+          </div>
         </div>
       </section>
 
@@ -735,6 +780,11 @@ export const VerificationPortal: React.FC<VerificationPortalProps> = ({
                       {req.status === 'Pending' ? (
                         <button
                           onClick={() => {
+                            if (!currentUser) {
+                              alert("⚠️ Sign-in Required: You must be signed in before you can access the Peer Audit Workstation and verify proof artifacts.");
+                              onOpenAuthModal?.();
+                              return;
+                            }
                             setActiveAuditRequest(req);
                             setCurrentStep(1);
                             setStep1Passed(false);
@@ -749,21 +799,45 @@ export const VerificationPortal: React.FC<VerificationPortalProps> = ({
                           <ChevronRight className="h-3.5 w-3.5" />
                         </button>
                       ) : (
-                        <button
-                          onClick={() => {
-                            if (onOpenDocumentViewer && req.documentUrl) {
-                              onOpenDocumentViewer(req.documentUrl, `Raw External Source: ${req.sourceId}`);
-                            } else if (req.documentUrl) {
-                              window.open(req.documentUrl, '_blank');
-                            } else {
-                              alert('No raw document URL associated with this proof.');
-                            }
-                          }}
-                          className="px-4 py-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-bold text-xs rounded-xl shadow-2xs transition cursor-pointer flex items-center space-x-1"
-                        >
-                          <span>View Artifact</span>
-                          <ExternalLink className="h-3.5 w-3.5" />
-                        </button>
+                        <div className="flex items-center space-x-1.5">
+                          {onOpenProofVerification && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const parsedPR = req.sourceId.includes('#') ? parseInt(req.sourceId.replace(/\D/g, ''), 10) : undefined;
+                                onOpenProofVerification({
+                                  repo: req.projectTitle,
+                                  authorHandle: req.submittedBy,
+                                  prTitle: req.description,
+                                  prNumber: parsedPR,
+                                  linesAdded: req.metadata?.linesAdded,
+                                  linesDeleted: req.metadata?.linesDeleted,
+                                  state: 'merged'
+                                });
+                              }}
+                              className="px-3 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 font-bold text-xs rounded-xl shadow-2xs transition cursor-pointer flex items-center space-x-1"
+                              title="Generate Proof Certificate for this deliverable"
+                            >
+                              <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
+                              <span>Certify</span>
+                            </button>
+                          )}
+                          <button
+                            onClick={() => {
+                              if (onOpenDocumentViewer && req.documentUrl) {
+                                onOpenDocumentViewer(req.documentUrl, `Raw External Source: ${req.sourceId}`);
+                              } else if (req.documentUrl) {
+                                window.open(req.documentUrl, '_blank');
+                              } else {
+                                alert('No raw document URL associated with this proof.');
+                              }
+                            }}
+                            className="px-3 py-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-bold text-xs rounded-xl shadow-2xs transition cursor-pointer flex items-center space-x-1"
+                          >
+                            <span>Artifact</span>
+                            <ExternalLink className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
                       )}
                     </div>
                   </div>
@@ -771,7 +845,7 @@ export const VerificationPortal: React.FC<VerificationPortalProps> = ({
               </div>
             )}
           </div>
-        ) : (
+        ) : activePortalTab === 'registry' ? (
           /* VETTED REGISTRY VIEW (Original OpenProofInspector content) */
           <div className="space-y-8">
             <div className="flex flex-col lg:flex-row gap-6 items-start lg:items-center justify-between bg-slate-50 p-4 rounded-2xl border border-slate-200/50">
@@ -867,19 +941,284 @@ export const VerificationPortal: React.FC<VerificationPortalProps> = ({
                         </span>
                       </div>
 
-                      <button
-                        type="button"
-                        onClick={() => setInspectEvidence(ev)}
-                        className="py-2 px-4 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-bold text-xs rounded-xl transition shadow-2xs cursor-pointer flex items-center space-x-1.5"
-                      >
-                        <span>Inspect</span>
-                        <ExternalLink className="h-3.5 w-3.5 text-slate-400" />
-                      </button>
+                      <div className="flex items-center space-x-1.5">
+                        {onOpenProofVerification && (
+                          <button
+                            type="button"
+                            onClick={() => onOpenProofVerification({
+                              repo: ev.projectName,
+                              authorHandle: ev.submittedBy,
+                              prTitle: ev.title,
+                              state: 'merged'
+                            })}
+                            className="py-2 px-3 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-800 font-bold text-xs rounded-xl transition shadow-2xs cursor-pointer flex items-center space-x-1"
+                            title="Generate Official Proof Certificate for this record"
+                          >
+                            <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
+                            <span className="hidden sm:inline">Certify</span>
+                          </button>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => setInspectEvidence(ev)}
+                          className="py-2 px-4 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-bold text-xs rounded-xl transition shadow-2xs cursor-pointer flex items-center space-x-1.5"
+                        >
+                          <span>Inspect</span>
+                          <ExternalLink className="h-3.5 w-3.5 text-slate-400" />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))}
               </div>
             )}
+          </div>
+        ) : (
+          /* PROOF GENERATOR STUDIO VIEW */
+          <div className="space-y-8">
+            {/* Top Studio Hero Banner */}
+            <div className="bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 text-white rounded-3xl p-6 sm:p-8 relative overflow-hidden shadow-xl border border-slate-800">
+              <div className="absolute right-0 top-0 translate-x-8 -translate-y-8 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+              <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                <div className="space-y-3 max-w-2xl">
+                  <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-xs font-bold uppercase tracking-wider">
+                    <Sparkles className="h-3.5 w-3.5" />
+                    <span>Cryptographic Attestation Studio</span>
+                  </div>
+                  <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
+                    Proof of Contribution Certificate Generator
+                  </h2>
+                  <p className="text-sm text-slate-300 leading-relaxed font-normal">
+                    Generate verifiable cryptographic Proof of Work certificates for merged pull requests, milestone deliverables, and community audits. Certificates feature cryptographic SHA-256 seal integrity, CNCF DevStats scores, and instant verification QR codes.
+                  </p>
+                </div>
+
+                <div className="flex flex-col sm:flex-row lg:flex-col gap-3 shrink-0">
+                  {onOpenProofVerification && (
+                    <button
+                      type="button"
+                      onClick={() => onOpenProofVerification()}
+                      className="px-6 py-3.5 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-black text-sm rounded-xl shadow-lg transition flex items-center justify-center space-x-2 cursor-pointer group"
+                    >
+                      <ShieldCheck className="h-5 w-5" />
+                      <span>Launch Interactive Studio</span>
+                      <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
+                    </button>
+                  )}
+                  {onViewLedger && (
+                    <button
+                      type="button"
+                      onClick={onViewLedger}
+                      className="px-5 py-3 bg-slate-800/80 hover:bg-slate-700/80 text-slate-200 border border-slate-700 font-bold text-xs rounded-xl transition flex items-center justify-center space-x-2 cursor-pointer"
+                    >
+                      <Database className="h-4 w-4 text-slate-400" />
+                      <span>Explore Public Ledger</span>
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Contributor Identity Snapshot */}
+              <div className="mt-8 pt-6 border-t border-slate-800/80 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="bg-slate-900/60 border border-slate-800 p-3.5 rounded-2xl flex items-center space-x-3">
+                  <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold text-sm shrink-0">
+                    {currentUser?.name ? currentUser.name.charAt(0).toUpperCase() : 'U'}
+                  </div>
+                  <div className="truncate">
+                    <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Attestation Recipient</div>
+                    <div className="text-sm font-bold text-white truncate">{currentUser?.name || 'OpenSource Developer'}</div>
+                  </div>
+                </div>
+
+                <div className="bg-slate-900/60 border border-slate-800 p-3.5 rounded-2xl flex items-center space-x-3">
+                  <div className="w-10 h-10 rounded-xl bg-slate-800 text-slate-300 flex items-center justify-center shrink-0">
+                    <Github className="h-5 w-5" />
+                  </div>
+                  <div className="truncate">
+                    <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Verified Identity</div>
+                    <div className="text-sm font-bold text-emerald-400 font-mono truncate">
+                      {currentUser?.githubUsername ? `@${currentUser.githubUsername}` : currentUser?.handle || '@contributor'}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-slate-900/60 border border-slate-800 p-3.5 rounded-2xl flex items-center space-x-3">
+                  <div className="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center shrink-0">
+                    <Activity className="h-5 w-5" />
+                  </div>
+                  <div className="truncate">
+                    <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">OpenProof Passport</div>
+                    <div className="text-sm font-bold text-white font-mono">
+                      {currentUser?.githubVerified ? 'Verified Active' : 'Self-Sovereign'}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-slate-900/60 border border-slate-800 p-3.5 rounded-2xl flex items-center space-x-3">
+                  <div className="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center shrink-0">
+                    <Award className="h-5 w-5" />
+                  </div>
+                  <div className="truncate">
+                    <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Reputation Rank</div>
+                    <div className="text-sm font-bold text-purple-300 font-mono">
+                      Score: {currentUser?.reputation?.impactScore || 85} pts
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+
+            {/* Deliverables Ready for Immediate Certification */}
+            <div className="bg-white border border-slate-200/80 rounded-3xl p-6 sm:p-8 shadow-xs space-y-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-lg font-black text-slate-900">Recent Deliverables Ready to Certify</h3>
+                  <p className="text-xs text-slate-500 font-medium">Click any deliverable below to generate an immutable Proof of Work certificate in 1 click.</p>
+                </div>
+                <div className="flex items-center space-x-3 self-start sm:self-auto">
+                  {/* Account Scope Toggle */}
+                  <div className="bg-slate-100 p-1 rounded-xl flex items-center space-x-1 border border-slate-200/80">
+                    <button
+                      type="button"
+                      onClick={() => setDeliverableScope('all')}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
+                        deliverableScope === 'all' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500 hover:text-slate-900'
+                      }`}
+                    >
+                      All Network Events
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setDeliverableScope('mine')}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
+                        deliverableScope === 'mine' ? 'bg-indigo-600 text-white shadow-xs' : 'text-slate-500 hover:text-slate-900'
+                      }`}
+                    >
+                      My Account Deliverables
+                    </button>
+                  </div>
+
+                  {onOpenProofVerification && (
+                    <button
+                      type="button"
+                      onClick={() => onOpenProofVerification()}
+                      className="px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl shadow-xs transition flex items-center space-x-1.5 cursor-pointer"
+                    >
+                      <Plus className="h-3.5 w-3.5" />
+                      <span>Custom Certificate</span>
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              <div className="divide-y divide-slate-100 border border-slate-100 rounded-2xl overflow-hidden">
+                {filteredRequests
+                  .filter((req) => {
+                    if (deliverableScope === 'mine' && currentUser) {
+                      const userHandle = (currentUser.handle || '').toLowerCase().replace('@', '');
+                      const userGithub = (currentUser.githubUsername || '').toLowerCase().replace('@', '');
+                      const subBy = (req.submittedBy || '').toLowerCase().replace('@', '');
+                      return subBy === userHandle || subBy === userGithub;
+                    }
+                    return true;
+                  })
+                  .slice(0, 5)
+                  .map((req) => {
+                    const prNum = req.sourceId.includes('#') ? parseInt(req.sourceId.replace(/\D/g, ''), 10) : undefined;
+                    const userHandle = (currentUser?.handle || '').toLowerCase().replace('@', '');
+                    const userGithub = (currentUser?.githubUsername || '').toLowerCase().replace('@', '');
+                    const subBy = (req.submittedBy || '').toLowerCase().replace('@', '');
+                    const isOwner = currentUser ? (subBy === userHandle || subBy === userGithub) : true;
+
+                    return (
+                      <div key={req.id} className="p-4 sm:p-5 hover:bg-slate-50 transition flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div className="space-y-1.5 flex-1">
+                          <div className="flex items-center space-x-2">
+                            <span className="font-mono text-xs font-bold text-indigo-600 bg-indigo-50 px-2.5 py-0.5 rounded-md border border-indigo-100">
+                              {req.sourceId}
+                            </span>
+                            <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                              req.status === 'Approved' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-amber-50 text-amber-700 border border-amber-200'
+                            }`}>
+                              {req.status}
+                            </span>
+                            {!isOwner && (
+                              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-50 text-purple-700 border border-purple-200">
+                                External Contributor
+                              </span>
+                            )}
+                          </div>
+                          <h4 className="text-sm font-bold text-slate-900 leading-snug">{req.projectTitle}</h4>
+                          <p className="text-xs text-slate-500 line-clamp-1">{req.description}</p>
+                        </div>
+
+                        <div className="flex items-center space-x-3 shrink-0">
+                          <div className="text-right hidden md:block">
+                            <div className="text-[11px] font-bold text-slate-700">{req.submittedBy}</div>
+                            <div className="text-[10px] font-mono text-slate-400">{req.createdAt}</div>
+                          </div>
+
+                          {onOpenProofVerification && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                if (currentUser && !isOwner && currentUser.role !== 'grant_admin' && currentUser.role !== 'organization') {
+                                  const confirmed = window.confirm(
+                                    `Security Notice: This contribution belongs to ${req.submittedBy}, whereas your active account handle is ${currentUser.handle}.\n\nTo prevent unauthorized impact claims, generating a certificate for another author's record requires cryptographic peer endorsement or auditor authority. Proceed with attestation review?`
+                                  );
+                                  if (!confirmed) return;
+                                }
+                                onOpenProofVerification({
+                                  repo: req.projectTitle,
+                                  authorHandle: req.submittedBy,
+                                  prTitle: req.description,
+                                  prNumber: prNum,
+                                  linesAdded: req.metadata?.linesAdded,
+                                  linesDeleted: req.metadata?.linesDeleted,
+                                  state: 'merged'
+                                });
+                              }}
+                              className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-xs transition flex items-center space-x-1.5 cursor-pointer"
+                            >
+                              <ShieldCheck className="h-4 w-4" />
+                              <span>Generate Certificate</span>
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+              </div>
+            </div>
+
+            {/* Interactive Preview Showcase Banner */}
+            <div className="bg-amber-50/50 border border-amber-200/80 rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+              <div className="space-y-2 max-w-xl">
+                <div className="inline-flex items-center space-x-1.5 text-amber-800 text-xs font-bold uppercase tracking-wider">
+                  <QrCode className="h-4 w-4 text-amber-700" />
+                  <span>Publicly Verifiable Output</span>
+                </div>
+                <h3 className="text-lg font-black text-slate-900">
+                  Ready to publish or export your certificate?
+                </h3>
+                <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                  The Proof of Contribution certificate comes complete with an immutable SHA-256 seal, cryptographic signature chain, and an instant-verification QR code compatible with grant issuers and fiscal sponsors.
+                </p>
+              </div>
+
+              {onOpenProofVerification && (
+                <button
+                  type="button"
+                  onClick={() => onOpenProofVerification()}
+                  className="px-6 py-3 bg-slate-900 hover:bg-slate-800 text-white font-black text-xs rounded-xl shadow-md transition flex items-center space-x-2 shrink-0 cursor-pointer"
+                >
+                  <ShieldCheck className="h-4 w-4 text-emerald-400" />
+                  <span>Open Full Certificate Studio</span>
+                </button>
+              )}
+            </div>
           </div>
         )}
       </section>
@@ -946,6 +1285,41 @@ export const VerificationPortal: React.FC<VerificationPortalProps> = ({
                     </div>
                   ))}
                 </div>
+
+                {/* Auditor Authorization Gating Warning */}
+                {!isAuditorAuthorized && (
+                  <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 text-xs text-amber-900 flex items-start space-x-3">
+                    <Lock className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
+                    <div className="space-y-2 flex-1">
+                      <div>
+                        <span className="font-black text-amber-950 block uppercase tracking-wide">Authorized Peer Auditor Access Required</span>
+                        <p className="text-amber-800 mt-0.5">Only authorized peer auditors, grant administrators, or contributors with an Impact Score ≥ 50 can proceed through audit workstation steps.</p>
+                      </div>
+                      <div className="flex gap-2 pt-1">
+                        <input
+                          type="text"
+                          value={auditorKeyInput}
+                          onChange={(e) => {
+                            setAuditorKeyInput(e.target.value);
+                            setAuditorKeyError('');
+                          }}
+                          placeholder="Enter Auditor Passkey (e.g. AUDIT-PRO-2026)"
+                          className="flex-1 bg-white text-slate-900 text-xs px-3 py-1.5 rounded-xl border border-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-500/20 font-mono"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => handleUnlockAuditor()}
+                          className="px-3 py-1.5 bg-amber-900 hover:bg-amber-800 text-white text-xs font-bold rounded-xl transition cursor-pointer shrink-0"
+                        >
+                          Verify Passkey
+                        </button>
+                      </div>
+                      {auditorKeyError && (
+                        <p className="text-[11px] text-rose-600 font-bold">{auditorKeyError}</p>
+                      )}
+                    </div>
+                  </div>
+                )}
 
                 {/* Left details pane / Right interactive step checks */}
                 <div className="border border-slate-100 rounded-2xl p-5 bg-slate-50 space-y-3">
@@ -1227,6 +1601,10 @@ export const VerificationPortal: React.FC<VerificationPortalProps> = ({
                       <button
                         type="button"
                         onClick={() => {
+                          if (!isAuditorAuthorized) {
+                            alert('⚠️ Authorized Peer Auditor Access Required: Please verify your auditor passkey or credentials before proceeding.');
+                            return;
+                          }
                           if (currentStep === 1 && !step1Passed) {
                             alert('Please certify that Step 1 origin details are valid before proceeding.');
                             return;
@@ -1381,6 +1759,26 @@ export const VerificationPortal: React.FC<VerificationPortalProps> = ({
             </div>
 
             <div className="pt-2 flex flex-col sm:flex-row gap-3">
+              {onOpenProofVerification && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    onOpenProofVerification({
+                      repo: inspectEvidence.projectName,
+                      contributorName: inspectEvidence.submittedBy,
+                      authorHandle: inspectEvidence.submittedBy,
+                      contributorHandle: inspectEvidence.submittedBy,
+                      prTitle: inspectEvidence.title,
+                      state: 'merged'
+                    });
+                  }}
+                  className="flex-1 py-3 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl transition flex items-center justify-center space-x-2 shadow-md cursor-pointer"
+                >
+                  <ShieldCheck className="h-4 w-4" />
+                  <span>Generate Certificate</span>
+                </button>
+              )}
+
               <button
                 type="button"
                 onClick={() => {

@@ -178,7 +178,7 @@ export const FiscalHostPortal: React.FC<FiscalHostPortalProps> = ({
       name: newCollectiveData.name,
       slug: newCollectiveData.name.toLowerCase().replace(/[^a-z0-9]/g, '-'),
       category: newCollectiveData.category,
-      logo: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=120',
+      logo: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=150&auto=format&fit=crop&q=80',
       tagline: newCollectiveData.tagline || 'Open-source community project.',
       description: newCollectiveData.description || 'Transparent collective managed under 501(c)(6) fiscal hosting.',
       githubRepo: newCollectiveData.githubRepo || undefined,
@@ -193,7 +193,7 @@ export const FiscalHostPortal: React.FC<FiscalHostPortalProps> = ({
       maintainers: [
         {
           name: newCollectiveData.leadMaintainer || 'Maintainer',
-          avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120',
+          avatar: '/skillschlogo.svg',
           role: 'Lead Maintainer',
         },
       ],
@@ -767,21 +767,21 @@ export const FiscalHostPortal: React.FC<FiscalHostPortalProps> = ({
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
               Host events like OSCA, PyCon, or local DevFests. Lock hackathon prize bounties into milestone escrow, collect corporate sponsorships with tax receipts, and pay venue deposits upon invoice verification.
             </p>
-            <div className="pt-2 flex flex-wrap items-center gap-3">
+            <div className="pt-2 flex flex-row items-center flex-nowrap gap-3 overflow-x-auto pb-1">
               {onOpenSponsorEventModal && (
                 <button
                   type="button"
                   onClick={onOpenSponsorEventModal}
-                  className="px-5 py-3 bg-white hover:bg-slate-100 text-slate-950 font-bold text-xs rounded-full transition shadow-sm cursor-pointer flex items-center space-x-2"
+                  className="px-5 py-3 bg-white hover:bg-slate-100 text-slate-950 font-bold text-xs rounded-full transition shadow-sm cursor-pointer flex items-center space-x-2 whitespace-nowrap shrink-0"
                 >
-                  <Ticket className="h-4 w-4 text-indigo-600" />
+                  <Ticket className="h-4 w-4 text-indigo-600 shrink-0" />
                   <span>Browse & Sponsor Events</span>
                 </button>
               )}
               <button
                 type="button"
                 onClick={() => setShowCreateModal(true)}
-                className="px-5 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-full transition cursor-pointer"
+                className="px-5 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-full transition cursor-pointer whitespace-nowrap shrink-0"
               >
                 Host Your Event Under 501(c)(6)
               </button>

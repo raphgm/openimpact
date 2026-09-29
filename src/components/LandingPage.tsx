@@ -56,13 +56,13 @@ const AVATAR_OPTIONS = [
     left: {
       name: 'Amara Okafor',
       role: 'Lead Maintainer',
-      img: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&q=80&w=250',
+      img: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
       badgeBg: 'bg-emerald-500',
     },
     right: {
       name: 'Nneka Okonjo',
       role: 'Lead Auditor',
-      img: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=250',
+      img: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=200&q=80',
       badgeBg: 'bg-purple-600',
     },
   },
@@ -71,13 +71,13 @@ const AVATAR_OPTIONS = [
     left: {
       name: "Julian O'Connor",
       role: 'Core Architect',
-      img: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=250',
+      img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80',
       badgeBg: 'bg-blue-500',
     },
     right: {
       name: 'Sofia Chen',
       role: 'Grant Auditor',
-      img: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=250',
+      img: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=200&q=80',
       badgeBg: 'bg-indigo-600',
     },
   },
@@ -86,13 +86,13 @@ const AVATAR_OPTIONS = [
     left: {
       name: 'Kareem Adeyemi',
       role: 'DevOps Engineer',
-      img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=250',
+      img: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80',
       badgeBg: 'bg-teal-500',
     },
     right: {
       name: 'Dr. Maya Lin',
       role: 'Fiscal Compliance',
-      img: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&q=80&w=250',
+      img: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80',
       badgeBg: 'bg-rose-600',
     },
   },
@@ -101,13 +101,13 @@ const AVATAR_OPTIONS = [
     left: {
       name: 'David Osei',
       role: 'API Engineer',
-      img: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&q=80&w=250',
+      img: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=200&q=80',
       badgeBg: 'bg-indigo-500',
     },
     right: {
       name: 'Maya Lin',
       role: 'Peer Reviewer',
-      img: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=250',
+      img: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=200&q=80',
       badgeBg: 'bg-emerald-600',
     },
   },
@@ -829,7 +829,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                 {/* Floating User Profile Card Graphic */}
                 <div className="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-md w-full max-w-[240px] space-y-3 text-left transform hover:scale-102 transition duration-200">
                   <div className="flex items-center space-x-3">
-                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100" alt="User" className="w-10 h-10 rounded-full object-cover shrink-0 border border-slate-200" />
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80" alt="User" className="w-10 h-10 rounded-full object-cover shrink-0 border border-slate-200" />
                     <div>
                       <div className="text-xs font-bold text-slate-900 flex items-center space-x-1">
                         <span>Verified User</span>

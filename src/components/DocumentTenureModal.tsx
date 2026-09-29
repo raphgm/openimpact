@@ -383,7 +383,7 @@ export const DocumentTenureModal: React.FC<DocumentTenureModalProps> = ({
       issuedAt: new Date().toISOString(),
       leaderName: currentUser?.name || "Julian O'Connor (Verified Lead)",
       leaderHandle: currentUser?.handle || '@julian_dev',
-      leaderAvatar: currentUser?.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150',
+      leaderAvatar: currentUser?.avatar || '/unicef_icon.svg',
       linkedMilestones: linkedMs,
     };
 

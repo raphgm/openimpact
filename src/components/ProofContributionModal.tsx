@@ -270,11 +270,16 @@ export const ProofContributionModal: React.FC<ProofContributionModalProps> = ({
 
   const resolveInitialContributorName = () => {
     if (exportedGithub?.contributorName) return exportedGithub.contributorName;
+    if (exportedGithub?.authorHandle) return exportedGithub.authorHandle;
+    if (exportedGithub?.contributorHandle) return exportedGithub.contributorHandle;
     if (currentUser?.name) return currentUser.name;
     return 'OpenImpact Contributor';
   };
 
   const resolveInitialContributorHandle = () => {
+    if (exportedGithub?.authorHandle) {
+      return exportedGithub.authorHandle.startsWith('@') ? exportedGithub.authorHandle : `@${exportedGithub.authorHandle}`;
+    }
     if (exportedGithub?.contributorHandle) {
       return exportedGithub.contributorHandle.startsWith('@') ? exportedGithub.contributorHandle : `@${exportedGithub.contributorHandle}`;
     }
@@ -301,17 +306,14 @@ export const ProofContributionModal: React.FC<ProofContributionModalProps> = ({
       if (exportedGithub.repo) {
         setRepoInput(exportedGithub.repo.replace(/^https?:\/\/github\.com\//i, '').replace(/\.git$/i, ''));
       }
-      if (exportedGithub.contributorName) {
-        setContributorName(exportedGithub.contributorName);
+      if (exportedGithub.contributorName || exportedGithub.authorHandle || exportedGithub.contributorHandle) {
+        setContributorName(exportedGithub.contributorName || exportedGithub.authorHandle || exportedGithub.contributorHandle || '');
       } else if (currentUser?.name) {
         setContributorName(currentUser.name);
       }
-      if (exportedGithub.contributorHandle) {
-        setContributorHandle(
-          exportedGithub.contributorHandle.startsWith('@')
-            ? exportedGithub.contributorHandle
-            : `@${exportedGithub.contributorHandle}`
-        );
+      if (exportedGithub.authorHandle || exportedGithub.contributorHandle || exportedGithub.contributorName) {
+        const rawH = exportedGithub.authorHandle || exportedGithub.contributorHandle || exportedGithub.contributorName || '';
+        setContributorHandle(rawH.startsWith('@') ? rawH : `@${rawH}`);
       } else if (currentUser) {
         setContributorHandle(resolveUserHandle(currentUser));
       }
@@ -565,6 +567,22 @@ export const ProofContributionModal: React.FC<ProofContributionModalProps> = ({
 
         {/* Modal Content - Scrollable */}
         <div className="p-4 sm:p-6 overflow-y-auto space-y-5 flex-1 bg-[#FDFBF7]">
+          {/* Anti-Fraud & Cryptographic Security Notice */}
+          <div className="bg-indigo-50/70 border border-indigo-200/80 rounded-xl p-3.5 text-xs text-indigo-900 flex items-start gap-3">
+            <Lock className="h-4 w-4 text-indigo-600 shrink-0 mt-0.5" />
+            <div className="space-y-1">
+              <span className="font-bold block text-indigo-950">How OpenImpact Prevents Fraud & Unauthorized Certificates:</span>
+              <p className="text-[11px] text-indigo-900 leading-relaxed">
+                While anyone can audit and preview contribution metrics, <strong>escrow payouts and binding milestone releases</strong> cannot be claimed unilaterally. OpenImpact enforces strict anti-fraud safeguards:
+              </p>
+              <ul className="list-disc pl-4 text-[11px] space-y-0.5 text-indigo-900 font-medium">
+                <li><strong>Anti-Self-Endorsement:</strong> Submitters are strictly blocked from auditing or voting on their own proof artifacts.</li>
+                <li><strong>Multi-Party Auditor Quorum:</strong> Escrow unlock requires verified independent peer auditor sign-offs and 501(c)(6) fiscal oversight.</li>
+                <li><strong>SHA-256 Ledger Anchoring:</strong> Every certificate embeds an immutable cryptographic hash. Any forged or modified claim breaks the hash instantly on the public verification ledger.</li>
+              </ul>
+            </div>
+          </div>
+
           {/* Audit Controls Bar */}
           <div className="bg-white p-4 rounded-xl border border-[#E8E2D6] shadow-2xs space-y-3">
             <div className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center justify-between">
@@ -840,9 +858,9 @@ export const ProofContributionModal: React.FC<ProofContributionModalProps> = ({
             {/* Certificate Header with Open Impact Logo */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b-2 border-slate-900 pb-5 mb-6 gap-4">
               <div className="flex items-center space-x-3.5">
-                <div className="relative w-11 h-11 flex items-center justify-center shrink-0">
-                  <div className="absolute w-7 h-9 bg-[#8B5CF6] rounded-full transform -rotate-[30deg] translate-x-1 shadow-sm"></div>
-                  <div className="absolute w-7 h-9 bg-[#10B981] rounded-full transform -rotate-[30deg] -translate-x-1 opacity-90 shadow-sm"></div>
+                <div className="logo-mark relative w-11 h-11 shrink-0">
+                  <span className="logo-shape logo-blue absolute w-[24px] h-[38px] rounded-[14px_14px_14px_3px] rotate-[-28deg] left-[17px] top-[1px] bg-gradient-to-br from-indigo-600 to-purple-600" />
+                  <span className="logo-shape logo-green absolute w-[24px] h-[38px] rounded-[14px_14px_14px_3px] rotate-[-28deg] left-[4px] top-[3px] bg-gradient-to-br from-emerald-500 to-teal-500 opacity-95" />
                 </div>
                 <div className="flex flex-col text-left">
                   <span className="font-black text-xl sm:text-2xl tracking-tight text-slate-900 block">Open Impact</span>

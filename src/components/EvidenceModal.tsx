@@ -54,6 +54,7 @@ interface EvidenceModalProps {
   currentUser?: UserProfile;
   onClose: () => void;
   onOpenDocumentViewer?: (url?: string, title?: string) => void;
+  onOpenAuthModal?: () => void;
   onSubmitEvidence: (evidenceData: {
     title: string;
     type: EvidenceType;
@@ -84,6 +85,7 @@ export const EvidenceModal: React.FC<EvidenceModalProps> = ({
   currentUser,
   onClose,
   onOpenDocumentViewer,
+  onOpenAuthModal,
   onSubmitEvidence,
   onSubmitBatchEvidence,
 }) => {
@@ -134,7 +136,7 @@ export const EvidenceModal: React.FC<EvidenceModalProps> = ({
         id: 'c_1',
         evidenceId: 'ev_1',
         author: 'Dr. Chidi Nnamdi',
-        avatar: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=150',
+        avatar: '/unicef_icon.svg',
         role: 'Verified Civic Auditor',
         vote: 'approve',
         comment: 'Verified the notarized land lease deed against local land registry records. Water rights and 2-year tenure are fully secured.',
@@ -144,7 +146,7 @@ export const EvidenceModal: React.FC<EvidenceModalProps> = ({
         id: 'c_2',
         evidenceId: 'ev_1',
         author: 'Kavita Sundaram (@kavita_dev)',
-        avatar: 'https://images.unsplash.com/photo-1580894732444-8ecded7900cd?w=150',
+        avatar: '/unicef_icon.svg',
         role: 'Community Reviewer',
         vote: 'approve',
         comment: 'Floor plan dimensions matched the equipment space requirements for 75 mini PCs. Good to proceed.',
@@ -156,7 +158,7 @@ export const EvidenceModal: React.FC<EvidenceModalProps> = ({
         id: 'c_3',
         evidenceId: 'ev_2',
         author: "Julian O'Connor",
-        avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150',
+        avatar: '/unicef_icon.svg',
         role: 'Escrow Guardian',
         vote: 'approve',
         comment: 'Inspected physical photo artifacts and serial numbers on mini PCs. Inverter battery backup is operational.',
@@ -168,7 +170,7 @@ export const EvidenceModal: React.FC<EvidenceModalProps> = ({
         id: 'c_4',
         evidenceId: 'ev_3',
         author: 'Tunde Bakare (@tunde_audit)',
-        avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150',
+        avatar: '/unicef_icon.svg',
         role: 'Peer Reviewer',
         vote: 'approve',
         comment: 'Reviewed MikroTik firewall script in PR #45. Captive portal rate-limiting is configured appropriately for student Wi-Fi.',
@@ -389,6 +391,14 @@ export const EvidenceModal: React.FC<EvidenceModalProps> = ({
 
   const toggleEndorsement = (evId: string, e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
+
+    if (!currentUser) {
+      setSelfActionNotice("⚠️ Sign-in Required: Community members must be signed in before they can endorse proof artifacts.");
+      setTimeout(() => setSelfActionNotice(null), 5000);
+      onOpenAuthModal?.();
+      return;
+    }
+
     const targetEv = project.evidence.find((item) => item.id === evId) || activeEvidence;
 
     if (checkIsSelf(targetEv)) {
@@ -427,6 +437,13 @@ export const EvidenceModal: React.FC<EvidenceModalProps> = ({
   // Handle Vote Action
   const handleVote = (voteType: 'approve' | 'flag') => {
     if (!activeEvidence) return;
+
+    if (!currentUser) {
+      setSelfActionNotice("⚠️ Sign-in Required: Community members must be signed in before they can audit or vote on proof artifacts.");
+      setTimeout(() => setSelfActionNotice(null), 5000);
+      onOpenAuthModal?.();
+      return;
+    }
 
     if (isSelfSubmitted) {
       setSelfActionNotice("⚠️ Submitter Vote Blocked: Submitter verification votes are excluded from quorum calculations to prevent conflict of interest.");
@@ -474,7 +491,7 @@ export const EvidenceModal: React.FC<EvidenceModalProps> = ({
       id: `c_${Date.now()}`,
       evidenceId: activeEvidence.id,
       author: isSelfSubmitted ? 'You (Artifact Submitter)' : 'You (Verified Contributor)',
-      avatar: currentUser?.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150',
+      avatar: currentUser?.avatar || '/unicef_icon.svg',
       role: isSelfSubmitted ? 'Artifact Author' : 'Peer Reviewer',
       vote: isSelfSubmitted ? 'neutral' : newCommentVote,
       comment: newCommentText,

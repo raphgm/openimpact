@@ -1533,8 +1533,12 @@ export default function App() {
             <VerificationPortal
               projects={projects}
               currentUser={currentUser}
-              onOpenProofVerification={() => setShowProofModal(true)}
+              onOpenProofVerification={(exported) => {
+                if (exported) handleExportGithub(exported);
+                setShowProofModal(true);
+              }}
               onOpenDocumentViewer={handleOpenDocumentViewer}
+              onOpenAuthModal={() => setAuthModalMode('select')}
               onViewLedger={() => setActiveTab('grants')}
             />
           </div>
@@ -1704,6 +1708,7 @@ export default function App() {
           onSubmitEvidence={handleSubmitEvidence}
           onSubmitBatchEvidence={handleSubmitBatchEvidence}
           onOpenDocumentViewer={handleOpenDocumentViewer}
+          onOpenAuthModal={() => setAuthModalMode('select')}
         />
       )}
 

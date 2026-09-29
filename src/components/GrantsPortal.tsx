@@ -148,7 +148,7 @@ export const GrantsPortal: React.FC<GrantsPortalProps> = ({
           <p className="text-base text-slate-600 max-w-xl mx-auto lg:mx-0 font-medium leading-relaxed">
             Organizations and foundations create non-dilutive grant funds. Apply directly to official institutional grant programs with their original RFP application links, backed by transparent milestone verification.
           </p>
-          <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center lg:justify-start gap-4 pt-4">
+          <div className="flex flex-col sm:flex-row sm:flex-nowrap items-center justify-center lg:justify-start gap-4 pt-4 overflow-x-auto pb-2">
             <button 
               onClick={() => {
                 const target = document.getElementById('institutional-grants-list');
@@ -156,7 +156,7 @@ export const GrantsPortal: React.FC<GrantsPortalProps> = ({
                   target.scrollIntoView({ behavior: 'smooth' });
                 }
               }} 
-              className="w-full sm:w-64 h-16 px-6 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-lg transition flex items-center justify-center space-x-2.5 cursor-pointer text-sm border border-transparent"
+              className="w-full sm:w-auto h-16 px-6 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-lg transition flex items-center justify-center space-x-2.5 cursor-pointer text-xs sm:text-sm whitespace-nowrap border border-transparent shrink-0"
             >
               <Award className="h-4 w-4 text-emerald-200 shrink-0" />
               <span>Browse Official Grant Portals</span>
@@ -164,7 +164,7 @@ export const GrantsPortal: React.FC<GrantsPortalProps> = ({
             {onOpenSponsorEventModal && (
               <button 
                 onClick={onOpenSponsorEventModal}
-                className="w-full sm:w-64 h-16 px-6 bg-[#111827] hover:bg-slate-800 text-white font-bold rounded-xl shadow-lg transition flex items-center justify-center space-x-2.5 cursor-pointer text-sm border border-transparent"
+                className="w-full sm:w-auto h-16 px-6 bg-[#111827] hover:bg-slate-800 text-white font-bold rounded-xl shadow-lg transition flex items-center justify-center space-x-2.5 cursor-pointer text-xs sm:text-sm whitespace-nowrap border border-transparent shrink-0"
               >
                 <Ticket className="h-4 w-4 text-emerald-400 shrink-0" />
                 <span>Sponsor a Hackathon</span>
@@ -172,7 +172,7 @@ export const GrantsPortal: React.FC<GrantsPortalProps> = ({
             )}
             <button 
               onClick={() => setShowRegisterModal(true)}
-              className="w-full sm:w-64 h-16 px-6 bg-[#111827] hover:bg-slate-800 text-white font-bold rounded-xl shadow-lg transition flex items-center justify-center space-x-2.5 cursor-pointer text-sm border border-transparent"
+              className="w-full sm:w-auto h-16 px-6 bg-[#111827] hover:bg-slate-800 text-white font-bold rounded-xl shadow-lg transition flex items-center justify-center space-x-2.5 cursor-pointer text-xs sm:text-sm whitespace-nowrap border border-transparent shrink-0"
             >
               <PlusCircle className="h-4 w-4 text-emerald-400 shrink-0" />
               <span>Register Funding Program</span>
@@ -398,30 +398,6 @@ export const GrantsPortal: React.FC<GrantsPortalProps> = ({
                 <div className="text-[10px] text-slate-500 font-bold uppercase tracking-wide">Available Grant Pool</div>
                 <div className="text-3xl font-black text-indigo-600 mt-1">
                   {formatCurrency(selectedGrant.availableFunding, selectedGrant.currency)}
-                </div>
-
-                <div className="flex flex-wrap sm:justify-end gap-2 mt-4">
-                  {selectedGrant.websiteUrl && (
-                    <a
-                      href={selectedGrant.websiteUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="py-2.5 px-4 bg-white hover:bg-slate-50 text-slate-800 font-bold text-xs rounded-xl border border-slate-200 transition inline-flex items-center justify-center gap-2 shadow-sm"
-                      title="Open official program RFP and foundation guidelines"
-                    >
-                      <span>Program Website</span>
-                      <ExternalLink className="h-3.5 w-3.5 text-indigo-600" />
-                    </a>
-                  )}
-                  <button
-                    type="button"
-                    onClick={() => onApplyForGrant?.(selectedGrant)}
-                    className="py-2.5 px-6 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl transition shadow-md inline-flex items-center justify-center gap-2 flex-1 sm:flex-none text-center cursor-pointer"
-                    title={`Open official ${selectedGrant.organization.name} application portal`}
-                  >
-                    <span>Apply on Official Portal</span>
-                    <FileText className="h-3.5 w-3.5" />
-                  </button>
                 </div>
               </div>
             </div>
@@ -675,7 +651,7 @@ export const GrantsPortal: React.FC<GrantsPortalProps> = ({
                 organization: {
                   id: `org_custom_${Date.now()}`,
                   name: customOrgName,
-                  logo: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=120',
+                  logo: 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=150&auto=format&fit=crop&q=80',
                   verified: true,
                   description: `Official grant program organized by ${customOrgName}.`,
                   location: 'Global',

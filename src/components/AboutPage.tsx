@@ -211,43 +211,64 @@ export const AboutPage: React.FC<AboutPageProps> = ({
           <p className="text-base text-slate-600 font-medium">Built on three core principles of non-profit legal stewardship, cryptographic proof verification, and open access.</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white border border-slate-200 rounded-[2rem] p-8 shadow-sm space-y-4 hover:shadow-md transition-shadow group relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-50 rounded-full blur-2xl pointer-events-none group-hover:bg-indigo-100 transition-colors"></div>
-            <div className="relative z-10">
-              <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-700 flex items-center justify-center font-bold mb-6 border border-indigo-100 shadow-sm">
-                <Scale className="h-6 w-6" />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="bg-gradient-to-b from-white to-slate-50/50 border border-slate-200/80 rounded-[2.5rem] p-8 sm:p-10 shadow-lg hover:shadow-2xl transition-all duration-300 group relative overflow-hidden hover:-translate-y-1">
+            <div className="absolute top-0 right-0 w-36 h-36 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none group-hover:bg-indigo-500/20 transition-colors"></div>
+            <div className="absolute top-6 right-6 font-mono text-3xl font-black text-slate-200 group-hover:text-indigo-200 transition-colors">01</div>
+            <div className="relative z-10 space-y-6">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-indigo-600 to-indigo-500 text-white flex items-center justify-center font-bold shadow-md shadow-indigo-500/20 group-hover:scale-110 transition-transform">
+                <Scale className="h-7 w-7" />
               </div>
-              <h3 className="text-xl font-black text-slate-900 mb-2">1. Non-Profit Legal Custody</h3>
-              <p className="text-sm text-slate-600 leading-relaxed font-medium">
-                OpenImpact acts as the legal fiscal sponsor for your collective. We hold funds in designated non-profit bank accounts, handle tax filings, and ensure strict compliance with international non-profit regulations.
-              </p>
+              <div className="space-y-3">
+                <h3 className="text-2xl font-black text-slate-950 tracking-tight group-hover:text-indigo-600 transition-colors">Non-Profit Legal Custody</h3>
+                <p className="text-sm text-slate-600 leading-relaxed font-medium">
+                  OpenImpact acts as the legal fiscal sponsor for your collective. We hold funds in designated non-profit bank accounts, handle tax filings, and ensure strict compliance with international non-profit regulations.
+                </p>
+              </div>
+              <div className="pt-2 flex items-center text-xs font-bold text-indigo-600 space-x-1.5">
+                <CheckCircle2 className="w-4 h-4" />
+                <span>501(c)(6) Tax Exempt Status</span>
+              </div>
             </div>
           </div>
 
-          <div className="bg-white border border-slate-200 rounded-[2rem] p-8 shadow-sm space-y-4 hover:shadow-md transition-shadow group relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-50 rounded-full blur-2xl pointer-events-none group-hover:bg-indigo-100 transition-colors"></div>
-            <div className="relative z-10">
-              <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-700 flex items-center justify-center font-bold mb-6 border border-indigo-100 shadow-sm">
-                <Lock className="h-6 w-6" />
+          <div className="bg-gradient-to-b from-white to-slate-50/50 border border-slate-200/80 rounded-[2.5rem] p-8 sm:p-10 shadow-lg hover:shadow-2xl transition-all duration-300 group relative overflow-hidden hover:-translate-y-1">
+            <div className="absolute top-0 right-0 w-36 h-36 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none group-hover:bg-emerald-500/20 transition-colors"></div>
+            <div className="absolute top-6 right-6 font-mono text-3xl font-black text-slate-200 group-hover:text-emerald-200 transition-colors">02</div>
+            <div className="relative z-10 space-y-6">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white flex items-center justify-center font-bold shadow-md shadow-emerald-500/20 group-hover:scale-110 transition-transform">
+                <Lock className="h-7 w-7" />
               </div>
-              <h3 className="text-xl font-black text-slate-900 mb-2">2. Milestone Smart Escrow</h3>
-              <p className="text-sm text-slate-600 leading-relaxed font-medium">
-                Donors and grant pools deposit funds into automated milestone escrows. Funds are split into tranches and unlocked only when project teams submit verified evidence (code, hardware receipts, audit reports).
-              </p>
+              <div className="space-y-3">
+                <h3 className="text-2xl font-black text-slate-950 tracking-tight group-hover:text-emerald-600 transition-colors">Milestone Smart Escrow</h3>
+                <p className="text-sm text-slate-600 leading-relaxed font-medium">
+                  Donors and grant pools deposit funds into automated milestone escrows. Funds are split into tranches and unlocked only when project teams submit verified evidence (code, hardware receipts, audit reports).
+                </p>
+              </div>
+              <div className="pt-2 flex items-center text-xs font-bold text-emerald-600 space-x-1.5">
+                <CheckCircle2 className="w-4 h-4" />
+                <span>Automated Tranche Release</span>
+              </div>
             </div>
           </div>
 
-          <div className="bg-white border border-slate-200 rounded-[2rem] p-8 shadow-sm space-y-4 hover:shadow-md transition-shadow group relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-50 rounded-full blur-2xl pointer-events-none group-hover:bg-indigo-100 transition-colors"></div>
-            <div className="relative z-10">
-              <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-700 flex items-center justify-center font-bold mb-6 border border-indigo-100 shadow-sm">
-                <FileText className="h-6 w-6" />
+          <div className="bg-gradient-to-b from-white to-slate-50/50 border border-slate-200/80 rounded-[2.5rem] p-8 sm:p-10 shadow-lg hover:shadow-2xl transition-all duration-300 group relative overflow-hidden hover:-translate-y-1">
+            <div className="absolute top-0 right-0 w-36 h-36 bg-purple-500/10 rounded-full blur-3xl pointer-events-none group-hover:bg-purple-500/20 transition-colors"></div>
+            <div className="absolute top-6 right-6 font-mono text-3xl font-black text-slate-200 group-hover:text-purple-200 transition-colors">03</div>
+            <div className="relative z-10 space-y-6">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-purple-600 to-indigo-600 text-white flex items-center justify-center font-bold shadow-md shadow-purple-500/20 group-hover:scale-110 transition-transform">
+                <FileText className="h-7 w-7" />
               </div>
-              <h3 className="text-xl font-black text-slate-900 mb-2">3. OpenProof Peer Review</h3>
-              <p className="text-sm text-slate-600 leading-relaxed font-medium">
-                Independent technical peer auditors review submitted evidence against project specifications. Automated GitHub PR synchronization and CI test logs provide cryptographically verifiable proof of delivery.
-              </p>
+              <div className="space-y-3">
+                <h3 className="text-2xl font-black text-slate-950 tracking-tight group-hover:text-purple-600 transition-colors">OpenProof Peer Review</h3>
+                <p className="text-sm text-slate-600 leading-relaxed font-medium">
+                  Independent technical peer auditors review submitted evidence against project specifications. Automated GitHub PR synchronization and CI test logs provide cryptographically verifiable proof of delivery.
+                </p>
+              </div>
+              <div className="pt-2 flex items-center text-xs font-bold text-purple-600 space-x-1.5">
+                <CheckCircle2 className="w-4 h-4" />
+                <span>GitHub & CI Verification</span>
+              </div>
             </div>
           </div>
         </div>
@@ -293,82 +314,51 @@ export const AboutPage: React.FC<AboutPageProps> = ({
         </div>
       </section>
 
-      {/* Competitor Landscape & Market Comparison */}
-      <section className="bg-white border border-slate-200 rounded-[2.5rem] p-8 sm:p-12 shadow-sm space-y-10 text-left max-w-6xl mx-auto">
-        <div className="space-y-4 max-w-3xl">
-          <div className="inline-flex items-center space-x-2 bg-slate-100 text-slate-700 text-xs font-mono font-bold px-4 py-2 rounded-full border border-slate-200">
-             <span>ECOSYSTEM COMPARISON</span>
+
+      {/* Global Headquarters & Presence */}
+      <section className="bg-white border border-slate-200 rounded-[2.5rem] p-8 sm:p-12 shadow-sm space-y-8 text-left max-w-6xl mx-auto">
+        <div className="space-y-3 max-w-3xl">
+          <div className="inline-flex items-center space-x-2 bg-indigo-50 text-indigo-700 text-xs font-mono font-bold px-4 py-2 rounded-full border border-indigo-100">
+             <Globe className="h-3.5 w-3.5" />
+             <span>GLOBAL PRESENCE</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-black text-slate-950 tracking-tight">How OpenImpact Compares in the Market</h2>
+          <h2 className="text-3xl sm:text-4xl font-black text-slate-950 tracking-tight">Global Headquarters & Regional Hubs</h2>
           <p className="text-base text-slate-600 font-medium leading-relaxed">
-            While several platforms support public goods funding and open-source sustainability, OpenImpact uniquely combines non-profit fiscal sponsorship with cryptographically verifiable milestone escrow and AI assistance.
+            OpenImpact operates across international borders to connect donors, grantmakers, and open technology builders worldwide with local compliance and multi-currency support.
           </p>
         </div>
 
-        {/* Comparison Table */}
-        <div className="overflow-x-auto rounded-2xl border border-slate-200 shadow-sm">
-          <table className="w-full text-left border-collapse text-sm">
-            <thead>
-              <tr className="border-b border-slate-200 text-slate-900 font-black bg-slate-50/50">
-                <th className="py-4 px-6 uppercase tracking-wider text-xs">Feature / Capability</th>
-                <th className="py-4 px-6 bg-indigo-50 text-indigo-900 border-x border-indigo-200 uppercase tracking-wider text-xs">OpenImpact</th>
-                <th className="py-4 px-6 text-slate-500 uppercase tracking-wider text-xs">Open Collective</th>
-                <th className="py-4 px-6 text-slate-500 uppercase tracking-wider text-xs">Gitcoin Grants</th>
-                <th className="py-4 px-6 text-slate-500 uppercase tracking-wider text-xs">GitHub Sponsors</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 font-medium text-slate-700 bg-white">
-              <tr className="hover:bg-slate-50 transition-colors">
-                <td className="py-4 px-6 font-bold text-slate-900">501(c)(6) / Fiscal Sponsorship</td>
-                <td className="py-4 px-6 bg-indigo-50/50 border-x border-indigo-200 text-indigo-900 font-bold flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-indigo-600"/> Full Service</td>
-                <td className="py-4 px-6 text-emerald-600 flex items-center gap-2"><CheckCircle2 className="w-4 h-4"/> Full Service</td>
-                <td className="py-4 px-6 text-rose-500"><span className="font-bold text-lg leading-none mr-1">✕</span> No (Needs external host)</td>
-                <td className="py-4 px-6 text-rose-500"><span className="font-bold text-lg leading-none mr-1">✕</span> No (Maintainer account req)</td>
-              </tr>
-              <tr className="hover:bg-slate-50 transition-colors">
-                <td className="py-4 px-6 font-bold text-slate-900">Milestone Escrow Tranches</td>
-                <td className="py-4 px-6 bg-indigo-50/50 border-x border-indigo-200 text-indigo-900 font-bold flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-indigo-600"/> Auto Proof-of-Work</td>
-                <td className="py-4 px-6 text-amber-600">~ Manual / Budget based</td>
-                <td className="py-4 px-6 text-rose-500"><span className="font-bold text-lg leading-none mr-1">✕</span> Upfront matching pools</td>
-                <td className="py-4 px-6 text-rose-500"><span className="font-bold text-lg leading-none mr-1">✕</span> Direct monthly tips</td>
-              </tr>
-              <tr className="hover:bg-slate-50 transition-colors">
-                <td className="py-4 px-6 font-bold text-slate-900">Multi-Currency (Fiat + Crypto)</td>
-                <td className="py-4 px-6 bg-indigo-50/50 border-x border-indigo-200 text-indigo-900 font-bold flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-indigo-600"/> NGN, USD, KES, EUR, Crypto</td>
-                <td className="py-4 px-6 text-emerald-600 flex items-center gap-2"><CheckCircle2 className="w-4 h-4"/> USD & EUR & Crypto</td>
-                <td className="py-4 px-6 text-emerald-600 flex items-center gap-2"><CheckCircle2 className="w-4 h-4"/> Crypto (ETH/DAI/USDC)</td>
-                <td className="py-4 px-6 text-amber-600">~ USD via Credit Card</td>
-              </tr>
-              <tr className="hover:bg-slate-50 transition-colors">
-                <td className="py-4 px-6 font-bold text-slate-900">AI Grant Writer & Assistant</td>
-                <td className="py-4 px-6 bg-indigo-50/50 border-x border-indigo-200 text-indigo-900 font-bold flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-indigo-600"/> Built-in Gemini AI</td>
-                <td className="py-4 px-6 text-rose-500"><span className="font-bold text-lg leading-none mr-1">✕</span> None</td>
-                <td className="py-4 px-6 text-rose-500"><span className="font-bold text-lg leading-none mr-1">✕</span> None</td>
-                <td className="py-4 px-6 text-rose-500"><span className="font-bold text-lg leading-none mr-1">✕</span> None</td>
-              </tr>
-              <tr className="hover:bg-slate-50 transition-colors">
-                <td className="py-4 px-6 font-bold text-slate-900">Spam & Scam Shield</td>
-                <td className="py-4 px-6 bg-indigo-50/50 border-x border-indigo-200 text-indigo-900 font-bold flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-indigo-600"/> Auto Bot/Scam Guard</td>
-                <td className="py-4 px-6 text-amber-600">~ Manual moderation</td>
-                <td className="py-4 px-6 text-amber-600">~ Sybil defense (Passport)</td>
-                <td className="py-4 px-6 text-emerald-600 flex items-center gap-2"><CheckCircle2 className="w-4 h-4"/> GitHub platform security</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        {/* Competitor Breakdown Summaries */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
           <div className="p-6 bg-slate-50 border border-slate-200 rounded-2xl space-y-3">
-            <h4 className="font-bold text-slate-900 text-base flex items-center gap-2"><Building2 className="w-4 h-4 text-slate-500"/> Open Collective</h4>
+            <div className="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold">
+              <Building2 className="h-5 w-5" />
+            </div>
+            <h3 className="font-bold text-slate-900 text-lg">Americas Headquarters</h3>
+            <p className="text-xs font-mono text-indigo-700 font-bold">San Francisco, California, USA</p>
             <p className="text-sm text-slate-600 leading-relaxed font-medium">
-              A pioneer in open source fiscal hosting. While similar in offering non-profit financial wrappers, Open Collective lacks automated GitHub milestone escrow verification and AI-powered grant writing tools found in OpenImpact.
+              Primary 501(c)(6) non-profit registration, US tax compliance, corporate grant partnerships, and cryptographic escrow auditing.
             </p>
           </div>
+
           <div className="p-6 bg-slate-50 border border-slate-200 rounded-2xl space-y-3">
-            <h4 className="font-bold text-slate-900 text-base flex items-center gap-2"><Code className="w-4 h-4 text-slate-500"/> Gitcoin Grants</h4>
+            <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
+              <Globe className="h-5 w-5" />
+            </div>
+            <h3 className="font-bold text-slate-900 text-lg">Africa Operations Hub</h3>
+            <p className="text-xs font-mono text-emerald-700 font-bold">Lagos, Nigeria</p>
             <p className="text-sm text-slate-600 leading-relaxed font-medium">
-              Renowned for quadratic funding rounds in Web3. However, Gitcoin operates primarily as a grant matching portal and requires external fiscal hosts for tax compliance, whereas OpenImpact provides end-to-end fiscal hosting and milestone escrow.
+              Emerging tech developer onboarding, local fiat payout infrastructure (NGN/KES), and community-driven public goods funding.
+            </p>
+          </div>
+
+          <div className="p-6 bg-slate-50 border border-slate-200 rounded-2xl space-y-3">
+            <div className="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-bold">
+              <Award className="h-5 w-5" />
+            </div>
+            <h3 className="font-bold text-slate-900 text-lg">European Support Hub</h3>
+            <p className="text-xs font-mono text-purple-700 font-bold">Berlin, Germany</p>
+            <p className="text-sm text-slate-600 leading-relaxed font-medium">
+              Open-source maintainer relations, EU grant compliance, multi-currency treasury management, and privacy standards.
             </p>
           </div>
         </div>
