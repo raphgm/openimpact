@@ -3,6 +3,7 @@ import { UserProfile, Currency, Project } from '../types';
 import { formatCurrency, convertCurrency } from '../utils/formatters';
 import { User, Award, ShieldCheck, Github, MapPin, CheckCircle2, Briefcase, FileCheck, DollarSign, ExternalLink } from 'lucide-react';
 import { TenureRecord } from './DocumentTenureModal';
+import { ImpactDashboard } from './ImpactDashboard';
 
 interface ProfileViewProps {
   currentUser: UserProfile | null;
@@ -234,6 +235,14 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
           </div>
         </div>
       </section>
+
+      {/* 3. Impact Dashboard Widget */}
+      <ImpactDashboard
+        currentUser={currentUser}
+        projects={projects}
+        userEvidence={userEvidence}
+        userTenures={userTenures}
+      />
 
       {/* Verified Skills Matrix */}
       <section>

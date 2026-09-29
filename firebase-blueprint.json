@@ -74,6 +74,24 @@
         "timestamp": { "type": "string" }
       },
       "required": ["id", "name", "email", "github", "stream", "timestamp"]
+    },
+    "user_profile": {
+      "title": "User Profile",
+      "description": "User profile with OpenProof credentials, role, and reputation metrics.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "handle": { "type": "string" },
+        "email": { "type": "string" },
+        "avatar": { "type": "string" },
+        "role": { "type": "string", "enum": ["funder", "contributor", "organization"] },
+        "bio": { "type": "string" },
+        "location": { "type": "string" },
+        "skills": { "type": "array" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "name", "email", "role"]
     }
   },
   "firestore": {
@@ -92,6 +110,10 @@
     "/scholarship_claims/{claimId}": {
       "schema": "scholarship_claim",
       "description": "Registered scholarship candidates and claims"
+    },
+    "/users/{userId}": {
+      "schema": "user_profile",
+      "description": "User profile document mapped to Firebase Auth UID"
     }
   }
 }

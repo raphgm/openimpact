@@ -436,7 +436,7 @@ const RAW_INITIAL_PROJECTS: Project[] = [
       totalFunded: 1500000,
       projectsCount: 8,
     },
-    githubRepo: 'https://github.com/tiangolo/fastapi',
+    githubRepo: 'https://github.com/skillsch/impact_repo.git',
     description: 'SKILL.SCH is partnering with OpenImpact to train and certify up to 10,000 tech scholarship recipients worldwide. Learners complete verified public goods development challenges, merge real GitHub code contributions, and build secure applications to release milestone tranches. Recipients can claim their sponsored study space in real-time, locking down their certification path.',
     milestones: [
       {
@@ -471,7 +471,18 @@ const RAW_INITIAL_PROJECTS: Project[] = [
         submittedBy: 'SKILL.SCH Governance',
         submittedAt: '2026-09-27',
         status: 'Verified',
-        description: 'Certified document detailing the 10,000 sponsored spaces and partner escrow backing.',
+        description: 'Certified document detailing the 10,000 sponsored spaces, escrow deposit, and repository at https://github.com/skillsch/impact_repo.git.',
+      },
+      {
+        id: 'ev_ss_2',
+        projectId: 'proj_skillsch_scholarship',
+        title: 'Core Curriculum & OpenImpact Integration Framework',
+        type: 'Pull Request',
+        url: 'https://github.com/skillsch/impact_repo/pull/1',
+        submittedBy: 'skillsch-maintainer',
+        submittedAt: '2026-09-28',
+        status: 'Verified',
+        description: 'Merged pull request delivering initial verified learning modules and cryptographic milestone verifiers in skillsch/impact_repo.',
       }
     ],
     impactMetrics: [

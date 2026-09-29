@@ -64,7 +64,7 @@ export const ProofContributionModal: React.FC<ProofContributionModalProps> = ({
     if (initialProject) {
       setSelectedProject(initialProject);
       if (initialProject.githubRepo) {
-        const cleanRepo = initialProject.githubRepo.replace(/https?:\/\/github\.com\//i, '');
+        const cleanRepo = initialProject.githubRepo.replace(/https?:\/\/github\.com\//i, '').replace(/\.git$/i, '');
         setRepoInput(cleanRepo);
       } else {
         setRepoInput(initialProject.title);

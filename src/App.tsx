@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Currency, Project, Opportunity, GrantProgram, UserProfile, Evidence, EvidenceType } from "./types";
 import { INITIAL_USER, INITIAL_PROJECTS, INITIAL_OPPORTUNITIES, INITIAL_GRANTS, INITIAL_COLLECTIVES, CURRENCY_RATES } from "./data/mockData";
 import { convertCurrency, formatCurrency } from "./utils/formatters";
-import { db } from "./lib/firebase";
+import { db, auth, onAuthStateChanged, getUserProfile, buildDefaultUserProfile, saveUserProfile, logoutUser } from "./lib/firebase";
 import { collection, doc, setDoc, onSnapshot } from "firebase/firestore";
 
 // Components & Modals
@@ -324,6 +324,33 @@ export default function App() {
 
   const [currentUser, setCurrentUser] = useState<UserProfile | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+
+  // Sync real-time with Firebase Authentication state
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (fbUser) => {
+      if (fbUser) {
+        try {
+          let profile = await getUserProfile(fbUser.uid);
+          if (!profile) {
+            profile = buildDefaultUserProfile(fbUser, 'contributor');
+            await saveUserProfile(fbUser.uid, profile);
+          }
+          setCurrentUser(profile);
+          setIsLoggedIn(true);
+        } catch (err) {
+          console.error("Failed to load user profile on auth state change:", err);
+          const fallbackProfile = buildDefaultUserProfile(fbUser, 'contributor');
+          setCurrentUser(fallbackProfile);
+          setIsLoggedIn(true);
+        }
+      } else {
+        setCurrentUser(null);
+        setIsLoggedIn(false);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   // Selected Detail Views
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
@@ -1243,7 +1270,12 @@ export default function App() {
                     {currentUser.name.split(' ')[0]}
                   </button>
                   <button
-                    onClick={() => {
+                    onClick={async () => {
+                      try {
+                        await logoutUser();
+                      } catch (e) {
+                        console.error("Logout error:", e);
+                      }
                       setIsLoggedIn(false);
                       setCurrentUser(null);
                       if (activeTab === 'profile') {

@@ -59,6 +59,7 @@ export interface GitHubContributionItem {
 }
 
 const PRESET_REPOS = [
+  'skillsch/impact_repo',
   'openimpact/pay-bridge',
   'tiangolo/fastapi',
   'facebook/react',

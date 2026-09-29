@@ -274,11 +274,11 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenAuthModal }) =
               <div className="flex items-center space-x-2 text-xs sm:text-sm font-medium text-slate-700">
                 <Mail className="h-4 w-4 text-indigo-600 shrink-0" />
                 <span>If you have any questions, let us know at{' '}
-                  <a href="mailto:hello@openimpact.org" className="text-indigo-700 font-bold hover:underline">hello@openimpact.org</a>
+                  <a href="mailto:hello@openimpactglobal.org" className="text-indigo-700 font-bold hover:underline">hello@openimpactglobal.org</a>
                 </span>
               </div>
               <a 
-                href="mailto:hello@openimpact.org" 
+                href="mailto:hello@openimpactglobal.org" 
                 className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-xs transition inline-flex items-center gap-1.5 shrink-0"
               >
                 <Mail className="h-3.5 w-3.5" />
