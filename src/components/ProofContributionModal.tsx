@@ -35,6 +35,7 @@ interface ProofContributionModalProps {
   currentUser?: UserProfile | null;
   initialProject?: Project | null;
   exportedGithub?: ExportedGithubData | null;
+  onOpenAuthModal?: () => void;
 }
 
 interface RepoContribution {
@@ -254,6 +255,7 @@ export const ProofContributionModal: React.FC<ProofContributionModalProps> = ({
   currentUser,
   initialProject,
   exportedGithub,
+  onOpenAuthModal,
 }) => {
   const resolveUserHandle = (user?: UserProfile | null) => {
     if (user?.githubUsername) return `@${user.githubUsername.replace(/^@/, '')}`;
@@ -505,7 +507,7 @@ export const ProofContributionModal: React.FC<ProofContributionModalProps> = ({
     const badgeText = devStatsCount !== null 
       ? `CNCF%20Score%20${devStatsCount}%20%7C%20Verified%20(${selectedContributions.length}%20items)`
       : `Verified%20(${selectedContributions.length}%20items)`;
-    const badgeMarkdown = `[![OpenImpact Verified Contribution](https://img.shields.io/badge/OpenProof-${badgeText}-purple?style=for-the-badge&logo=github&labelColor=0b1329)](https://openimpact.network/verify/${certificateId})`;
+    const badgeMarkdown = `[![OpenImpact Verified Contribution](https://img.shields.io/badge/OpenProof-${badgeText}-purple?style=for-the-badge&logo=github&labelColor=0b1329)](https://openimpactglobal.org/verify/${certificateId})`;
     navigator.clipboard.writeText(badgeMarkdown);
     setCopiedBadge(true);
     setTimeout(() => setCopiedBadge(false), 2000);
@@ -538,6 +540,23 @@ export const ProofContributionModal: React.FC<ProofContributionModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/45 backdrop-blur-xs overflow-y-auto">
       <div className="relative w-full max-w-4xl bg-[#FDFBF7] border border-[#E5DFD5] rounded-2xl shadow-2xl overflow-hidden my-auto text-slate-900 flex flex-col max-h-[92vh]">
+        {!currentUser && (
+          <div className="bg-amber-50 border-b border-amber-200 px-4 py-2.5 flex items-center justify-between text-xs text-amber-900 shrink-0 z-10">
+            <span className="font-medium flex items-center gap-1.5">
+              <span>⚠️ You are browsing as a guest. Please sign in to generate and save verified certificates.</span>
+            </span>
+            <button
+              type="button"
+              onClick={() => {
+                onClose();
+                onOpenAuthModal?.();
+              }}
+              className="px-3 py-1 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-lg shadow-2xs transition cursor-pointer"
+            >
+              Sign In Now
+            </button>
+          </div>
+        )}
         {/* Modal Header */}
         <div className="flex items-center justify-between p-4 sm:p-5 border-b border-[#EAE3D2] bg-[#FAF6EE] shrink-0">
           <div className="flex items-center space-x-3">
@@ -1046,7 +1065,7 @@ export const ProofContributionModal: React.FC<ProofContributionModalProps> = ({
                     <ExternalLink className="h-3 w-3" />
                   </button>
                   <div className="text-[9px] font-mono text-indigo-700 font-bold truncate max-w-[120px]">
-                    openimpact.network/verify/{certificateId}
+                    openimpactglobal.org/verify/{certificateId}
                   </div>
                   <div className="text-[9px] text-slate-500 font-sans mt-0.5">
                     Scan or click to audit

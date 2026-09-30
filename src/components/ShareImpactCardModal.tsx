@@ -16,7 +16,8 @@ import {
   Square,
   Monitor,
   RefreshCw,
-  QrCode
+  QrCode,
+  Lock
 } from 'lucide-react';
 import { Project, Currency } from '../types';
 import { formatCurrency, calculateProgress } from '../utils/formatters';
@@ -46,6 +47,7 @@ export const ShareImpactCardModal: React.FC<ShareImpactCardModalProps> = ({
   const [copiedCaption, setCopiedCaption] = useState<boolean>(false);
   const [copiedLink, setCopiedLink] = useState<boolean>(false);
   const [generatedImageUrl, setGeneratedImageUrl] = useState<string | null>(null);
+  const [isShareable, setIsShareable] = useState<boolean>(true);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -53,7 +55,7 @@ export const ShareImpactCardModal: React.FC<ShareImpactCardModalProps> = ({
   const progress = calculateProgress(project.raised, project.fundingGoal);
   const completedMilestones = project.milestones?.filter((m) => m.status === 'Completed').length || 0;
   const totalMilestones = project.milestones?.length || 1;
-  const projectUrl = `https://openimpact.network/projects/${project.id}`;
+  const projectUrl = `https://openimpactglobal.org/projects/${project.id}`;
 
   // Theme palettes
   const themes = {
@@ -449,7 +451,7 @@ export const ShareImpactCardModal: React.FC<ShareImpactCardModalProps> = ({
     }
 
     // Direct URL & Verification badge on bottom right
-    const urlLabel = 'openimpact.network';
+    const urlLabel = 'openimpactglobal.org';
     ctx.font = 'bold 14px "JetBrains Mono", monospace';
     const urlW = ctx.measureText(urlLabel).width;
 
@@ -487,7 +489,7 @@ export const ShareImpactCardModal: React.FC<ShareImpactCardModalProps> = ({
 
   // Social sharing handlers
   const handleDownload = () => {
-    if (!canvasRef.current) return;
+    if (!isShareable || !canvasRef.current) return;
     setIsGenerating(true);
     const link = document.createElement('a');
     link.download = `${project.title.toLowerCase().replace(/[^a-z0-9]/g, '-')}-impact-card.png`;
@@ -497,7 +499,7 @@ export const ShareImpactCardModal: React.FC<ShareImpactCardModalProps> = ({
   };
 
   const handleCopyImage = async () => {
-    if (!canvasRef.current) return;
+    if (!isShareable || !canvasRef.current) return;
     try {
       canvasRef.current.toBlob(async (blob) => {
         if (!blob) return;
@@ -521,23 +523,27 @@ export const ShareImpactCardModal: React.FC<ShareImpactCardModalProps> = ({
     `👉 View and fund: ${projectUrl} #PublicGoods #ProofOfWork #OpenSource`;
 
   const handleCopyCaption = () => {
+    if (!isShareable) return;
     navigator.clipboard.writeText(shareText);
     setCopiedCaption(true);
     setTimeout(() => setCopiedCaption(false), 2000);
   };
 
   const handleCopyLink = () => {
+    if (!isShareable) return;
     navigator.clipboard.writeText(projectUrl);
     setCopiedLink(true);
     setTimeout(() => setCopiedLink(false), 2000);
   };
 
   const handleShareTwitter = () => {
+    if (!isShareable) return;
     const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
     window.open(twitterUrl, '_blank', 'noopener,noreferrer');
   };
 
   const handleShareLinkedIn = () => {
+    if (!isShareable) return;
     const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(projectUrl)}`;
     window.open(linkedInUrl, '_blank', 'noopener,noreferrer');
   };
@@ -683,6 +689,25 @@ export const ShareImpactCardModal: React.FC<ShareImpactCardModalProps> = ({
               </div>
             </div>
 
+            {/* Public Shareability Control */}
+            <div className="bg-white p-4 rounded-xl border border-[#E8E2D6] shadow-2xs space-y-2">
+              <label className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center justify-between">
+                <span>Public Shareability</span>
+                <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${isShareable ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-amber-50 text-amber-700 border border-amber-200'}`}>
+                  {isShareable ? 'Public (Shareable)' : 'Private (Not Shareable)'}
+                </span>
+              </label>
+              <label className="flex items-center justify-between text-xs text-slate-700 cursor-pointer pt-1">
+                <span className="font-medium">Allow public social sharing & links</span>
+                <input
+                  type="checkbox"
+                  checked={isShareable}
+                  onChange={(e) => setIsShareable(e.target.checked)}
+                  className="rounded text-indigo-600 focus:ring-0 cursor-pointer w-4 h-4"
+                />
+              </label>
+            </div>
+
             {/* Quick Share to Social Networks */}
             <div className="bg-white p-4 rounded-xl border border-[#E8E2D6] shadow-2xs space-y-2.5">
               <label className="text-xs font-bold text-slate-800 uppercase tracking-wider">
@@ -747,6 +772,13 @@ export const ShareImpactCardModal: React.FC<ShareImpactCardModalProps> = ({
                 <span>Refresh Preview</span>
               </button>
             </div>
+
+            {!isShareable && (
+              <div className="w-full bg-amber-50 border border-amber-200 text-amber-800 text-xs font-bold p-3 rounded-xl flex items-center justify-center gap-2 shadow-2xs">
+                <Lock className="h-4 w-4 shrink-0" />
+                <span>Private Card: Public sharing and exporting are currently disabled.</span>
+              </div>
+            )}
 
             {/* Visual Canvas Gallery Display */}
             <div className="w-full bg-[#0F172A] p-3 sm:p-4 rounded-2xl border border-slate-800 flex items-center justify-center overflow-hidden shadow-md">

@@ -388,6 +388,15 @@ export default function App() {
     }
   };
 
+  const requireAuth = (action: () => void) => {
+    if (!currentUser) {
+      setAuthModalMode('select');
+      setShowAuthModal(true);
+      return;
+    }
+    action();
+  };
+
   const [showCommandPalette, setShowCommandPalette] = useState<boolean>(false);
   const handleOpenDocumentTenureInFiscal = () => {
     setActiveTab('fiscal');
@@ -1637,6 +1646,10 @@ export default function App() {
         currentUser={currentUser}
         initialProject={proofModalProject}
         exportedGithub={lastExportedGithub}
+        onOpenAuthModal={() => {
+          setAuthModalMode('select');
+          setShowAuthModal(true);
+        }}
       />
 
       <DocumentViewerModal
